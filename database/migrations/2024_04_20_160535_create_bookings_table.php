@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vaccinations', function (Blueprint $table) {
+        Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
-            $table->integer("frequency");
-            $table->integer("interval");
-            $table->integer("modified_by")->nullable(); //foreign key gotta be here
+            $table->integer('child_id');
+            $table->string('child_name');
+            $table->dateTime('vaccination_date');
+            $table->integer('facility_id');
+            $table->json('vaccine_list');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vaccinations');
+        Schema::dropIfExists('bookings');
     }
 };

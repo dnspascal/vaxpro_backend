@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('parent_id');
             $table->integer('facility_id');
             $table->integer('address_district');
-            $table->int('address_name');
+            $table->integer('address_name');
             $table->string('house_no');
             $table->date('date_of_birth');
             $table->integer('modified_by');
