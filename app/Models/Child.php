@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Child extends Model
 {
     use HasFactory;
-    protected $fillable = ['firstname','middlename','surname','parent_id','facility_id','ward_id','address_name','house_no','date_of_birth','modified_by'];
+    protected $fillable = ['firstname','middlename','surname','parent_id','facility_id','ward_id','house_no','date_of_birth','modified_by'];
 
     public function bookings(){
         return $this->hasMany(Booking::class);
@@ -16,7 +16,7 @@ class Child extends Model
 
 
     public function vaccinations(){
-        return $this->hasMany(Vaccination::class);
+        return $this->belongsToMany(Vaccination::class,'child_vaccinations','child_id','vaccination_id');
     }
 
     public function users(){
@@ -24,7 +24,7 @@ class Child extends Model
     }
 
     public function facilities(){
-        return $this->belongsTo(Facility::class);
+        return $this->belongsTo(Facility::class,null,'card_no');
     }
 
     public function wards(){
@@ -35,4 +35,9 @@ class Child extends Model
         return $this->belongsTo(HealthWorker::class);
     }
 
+    public function parents_guardians(){
+        return $this->belongsToMany(ParentsGuardians::class,'parents_guardians_children','child_id','parents_guardians_id');
+       }
+
+     
 }

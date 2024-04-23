@@ -9,24 +9,17 @@ class HealthWorker extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['staff_id','name','facility_id','contacts','modified_by'];
+    protected $fillable = ['staff_id','first_name','last_name'];
 
-    public function child_vaccinations(){
+    public function child_vaccination_schedules(){
         return $this->hasMany(ChildVaccinationSchedule::class);
     }
 
     public function users(){
         return $this->belongsTo(User::class);
     }
-    public function facilities(){
-        return $this->belongsTo(Facility::class);
-    }
-
-    public function parents_guardians(){
-        return $this->hasMany(ParentsGuardians::class, 'modified_by','staff_id');
-    }
 
     public function children(){
-        return $this->hasMany(Child::class, 'modified_by','staff_id');
+        return $this->hasMany(Child::class,null,'card_no');
     }
 }

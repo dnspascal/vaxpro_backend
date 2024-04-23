@@ -11,6 +11,6 @@ class Vaccination extends Model
     protected $fillable = ['name','frequency','interval'];
 
     public function children(){
-        return $this->belongsToMany(Child::class);
+        return $this->belongsToMany(Child::class,'child_vaccinations','vaccination_id','child_id');
     }
 }

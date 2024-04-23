@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //FKeys....
-        Schema::create('community_accounts', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('ward_id');
-            $table->string('contacts');
-            $table->integer('modified_by');
-            $table->string('type');
-            $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');
+            $table->string("role"); 
+            $table->string("account_type"); // ministry,regional and district (identifies role level)
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('community_accounts');
+        Schema::dropIfExists('roles');
     }
 };

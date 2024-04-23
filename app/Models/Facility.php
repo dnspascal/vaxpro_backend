@@ -24,12 +24,16 @@ class Facility extends Model
     }
 
     public function health_workers(){
-        return $this->hasMany(HealthWorker::class);
+        return $this->hasMany(HealthWorker::class,null,'staff_id');
     }
 
     public function children(){
-        return $this->hasMany(Child::class);
+        return $this->hasMany(Child::class,null,'card_no');
     }
 
+
+    public function wards(){
+        return $this->belongsTo(Ward::class);
+    }
 
 }

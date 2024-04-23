@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     use HasFactory;
-    protected $fillable = ['child_id','child_name','vaccination_date','facility_id','vaccine_list'];
+    protected $fillable = ['child_id','vaccination_date','facility_id','vaccine_list'];
 
     public function children(){
-        return $this->belongsTo(Child::class);
+        return $this->belongsTo(Child::class,'child_id','card_no');
     }
     
 

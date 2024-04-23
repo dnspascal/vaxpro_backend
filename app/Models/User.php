@@ -17,12 +17,13 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'role',
+        'role_id',
+        'district_id',
+        'region_id',
         'ward_id',
         'password',
         'facility_id',
         'contacts',
-        'account_type',
         'modified_by'
     ];
 
@@ -53,8 +54,15 @@ class User extends Authenticatable
         return $this->belongsTo(Ward::class);
     }
 
+    public function regions(){
+        return $this->belongsTo(Region::class);
+    }
+    public function districts(){
+        return $this->belongsTo(District::class);
+    }
+
     public function facilities(){
-        return $this->belongsTo(Facility::class);
+        return $this->belongsTo(Facility::class,'facility_id','facility_reg_no');
     }
 
     public function health_workers(){
@@ -69,5 +77,9 @@ class User extends Authenticatable
     //user who adds the facility
     public function modified_by(){
         return $this->hasMany(Facility::class);
+    }
+
+    public function roles(){
+        return $this->belongsTo(Role::class);
     }
 }

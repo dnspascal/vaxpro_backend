@@ -15,11 +15,11 @@ class ChildVaccinationSchedule extends Model
     }
 
     public function health_workers(){
-        return $this->belongsTo(HealthWorker::class);
+        return $this->belongsTo(HealthWorker::class, "health_worker_id" ,"staff_id");
     }
 
     public function facilities(){
-        return $this->belongsTo(Facility::class);
+        return $this->belongsTo(Facility::class,'facility_id','facility_reg_no');
     }
 
 

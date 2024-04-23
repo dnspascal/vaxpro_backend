@@ -13,16 +13,22 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string("role"); // IT admin,ceo,cvo....
+            $table->unsignedBigInteger("role_id"); // IT admin,ceo,cvo,healthWorker....
             $table->string("password"); 
-            $table->string("ward_id")->nullable(); //foreign key gotta be here
-            $table->integer("facility_id")->nullable(); // foreign key gotta be here
+            $table->unsignedBigInteger("ward_id")->nullable(); //foreign key gotta be here
+            $table->unsignedBigInteger("district_id")->nullable(); //foreign key gotta be here
+            $table->unsignedBigInteger("region_id")->nullable(); //foreign key gotta be here
+            $table->string("facility_id")->nullable(); // foreign key gotta be here
             $table->string("contacts");
-            $table->string("account_type");// ministry,regional and district
             $table->integer("modified_by"); // foreign key
+            $table->foreign("role_id")->references("id")->on("roles")->onDelete("cascade");
             $table->foreign("ward_id")->references("id")->on("wards");
+            $table->foreign("region_id")->references("id")->on("regions"); //region accounts
+            $table->foreign("district_id")->references("id")->on("districts");// district accounts
             $table->foreign("facility_id")->references("id")->on("facilities");
             $table->timestamps();
+
+            //region,district
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

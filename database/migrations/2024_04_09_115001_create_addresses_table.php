@@ -31,6 +31,7 @@ return new class extends Migration
             $table->unsignedBigInteger('district_id');
             $table->string('ward_name');
             $table->foreign('district_id')->references('id')->on('districts')->onDelete('cascade');
+            $table->unique(['district_id','ward_name']); // unique together 
             $table->timestamps();
         });
 

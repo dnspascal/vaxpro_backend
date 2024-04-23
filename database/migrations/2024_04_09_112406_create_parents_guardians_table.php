@@ -17,12 +17,8 @@ return new class extends Migration
             $table->string('firstname');
             $table->string('middlename');
             $table->string('lastname');
-            $table->integer('contacts');
-            $table->string('password');
-            $table->unsignedBigInteger('ward_id');
-            $table->unsignedBigInteger('modified_by');
-            $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');
-            $table->foreign('modified_by')->references('staff_id')->on('health_workers')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
