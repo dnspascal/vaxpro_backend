@@ -11,25 +11,32 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ward', function (Blueprint $table) {
-            $table->id();
-            $table->string('district');
-            $table->string('ward_name');
-            $table->timestamps();
-        });
 
-        Schema::create('district', function (Blueprint $table) {
-            $table->id();
-            $table->string('region');
-            $table->string('district_name');
-            $table->timestamps();
-        });
-
-        Schema::create('region', function (Blueprint $table) {
+        Schema::create('regions', function (Blueprint $table) {
             $table->id();
             $table->string('region_name');
             $table->timestamps();
         });
+
+        Schema::create('districts', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('region_id');
+            $table->string('district_name');
+            $table->foreign('region_id')->references('id')->on('regions')->onDelete('cascade');
+            $table->timestamps();
+        });
+
+        Schema::create('wards', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('district_id');
+            $table->string('ward_name');
+            $table->foreign('district_id')->references('id')->on('districts')->onDelete('cascade');
+            $table->timestamps();
+        });
+
+      
+
+     
     }
 
     /**
@@ -37,6 +44,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('addresses');
+        Schema::dropIfExists('wards');
+        Schema::dropIfExists('districts');
+        Schema::dropIfExists('regions');
+
     }
 };

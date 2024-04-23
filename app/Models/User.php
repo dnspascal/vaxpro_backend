@@ -17,9 +17,13 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
+        'role',
+        'ward_id',
         'password',
+        'facility_id',
+        'contacts',
+        'account_type',
+        'modified_by'
     ];
 
     /**
@@ -29,7 +33,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
+        
     ];
 
     /**
@@ -40,8 +44,30 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
+           
             'password' => 'hashed',
         ];
+    }
+
+    public function wards(){
+        return $this->belongsTo(Ward::class);
+    }
+
+    public function facilities(){
+        return $this->belongsTo(Facility::class);
+    }
+
+    public function health_workers(){
+        return $this->hasMany(HealthWorker::class);
+    }
+
+    public function children(){
+        return $this->hasMany(Child::class);
+    }
+
+
+    //user who adds the facility
+    public function modified_by(){
+        return $this->hasMany(Facility::class);
     }
 }

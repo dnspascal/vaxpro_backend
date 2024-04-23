@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Vaccination extends Model
 {
     use HasFactory;
+    protected $fillable = ['name','frequency','interval'];
+
+    public function children(){
+        return $this->belongsToMany(Child::class);
+    }
 }

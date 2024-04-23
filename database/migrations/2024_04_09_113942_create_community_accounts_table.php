@@ -14,11 +14,11 @@ return new class extends Migration
         //FKeys....
         Schema::create('community_accounts', function (Blueprint $table) {
             $table->id();
-            $table->integer('address_district');
-            $table->integer('address_name');
+            $table->unsignedBigInteger('ward_id');
             $table->string('contacts');
             $table->integer('modified_by');
             $table->string('type');
+            $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');
             $table->timestamps();
         });
     }

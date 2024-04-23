@@ -9,5 +9,13 @@ class Booking extends Model
 {
     use HasFactory;
     protected $fillable = ['child_id','child_name','vaccination_date','facility_id','vaccine_list'];
+
+    public function children(){
+        return $this->belongsTo(Child::class);
+    }
     
+
+    public function facilities(){
+        return $this->belongsTo(Facility::class);
+    }
 }

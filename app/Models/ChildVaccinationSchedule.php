@@ -8,5 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class ChildVaccinationSchedule extends Model
 {
     use HasFactory;
-    protected $fillable = ['child_vaccination_id','health_worker_id','facility_id','frequency','vaccination_date','next_vaccination_date','status','modified_by'];
+    protected $fillable = ['child_vaccination_id','health_worker_id','facility_id','frequency','vaccination_date','next_vaccination_date','status'];
+
+    public function child_vaccinations(){
+        return $this->belongsTo(ChildVaccination::class);
+    }
+
+    public function health_workers(){
+        return $this->belongsTo(HealthWorker::class);
+    }
+
+    public function facilities(){
+        return $this->belongsTo(Facility::class);
+    }
+
+
 }

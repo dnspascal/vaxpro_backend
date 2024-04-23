@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string("name");
             $table->integer("frequency");
             $table->integer("interval");
-            $table->integer("modified_by")->nullable(); //foreign key gotta be here
             $table->timestamps();
         });
     }

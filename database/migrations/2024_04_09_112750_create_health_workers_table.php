@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('health_workers', function (Blueprint $table) {
            
-            $table->string('staff_id'); // primary key
+            $table->string('staff_id')->primary(); // primary key
             $table->string('name');
-            $table->string('facility'); // foregin key of facility
+            $table->string('facility_id'); // foregin key of facility
             $table->string('contacts');
-            $table->string('modified_by');
+            $table->unsignedBigInteger('modified_by');
+            $table->foreign('facility_id')->references('id')->on('facilities')->onDelete('cascade');
+            $table->foreign('modified_by')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

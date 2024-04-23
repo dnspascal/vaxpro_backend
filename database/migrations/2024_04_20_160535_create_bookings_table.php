@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->integer('child_id');
-            $table->string('child_name');
+            $table->string('child_id');
             $table->dateTime('vaccination_date');
-            $table->integer('facility_id');
+            $table->string('facility_id');
             $table->json('vaccine_list');
+            $table->foreign('child_id')->references('card_no')->on('children')->onDelete('cascade');
+            $table->foreign('facility_id')->references('facility_reg_no')->on('facilties')->onDelete('cascade');
             $table->timestamps();
         });
     }

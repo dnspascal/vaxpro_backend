@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string("role"); // IT admin,ceo,cvo....
+            $table->string("password"); 
+            $table->string("ward_id")->nullable(); //foreign key gotta be here
+            $table->integer("facility_id")->nullable(); // foreign key gotta be here
+            $table->string("contacts");
+            $table->string("account_type");// ministry,regional and district
+            $table->integer("modified_by"); // foreign key
+            $table->foreign("ward_id")->references("id")->on("wards");
+            $table->foreign("facility_id")->references("id")->on("facilities");
             $table->timestamps();
         });
 

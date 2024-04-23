@@ -14,14 +14,16 @@ return new class extends Migration
         Schema::create('child_vaccination_schedules', function (Blueprint $table) {
             //FKeys....
             $table->id();
-            $table->integer('child_vaccination_id');
-            $table->integer('health_worker_id');
-            $table->integer('facility_id');
+            $table->unsignedBigInteger('child_vaccination_id');// foreign
+            $table->unsignedBigInteger('health_worker_id');//foreign
+            $table->unsignedBigInteger('facility_id'); //foreign
             $table->string('frequency');
             $table->dateTime('vaccination_date');
             $table->dateTime('next_vaccination_date');
-            $table->boolean('status');
-            $table->integer('modified_by');
+            $table->boolean('status');// if false after the particular day a message is sent to the child.
+            $table->foreign('child_vaccination_id')->references('id')->on('child_vaccinations')->onDelete('cascade');
+            $table->foreign('health_worker_id')->references('id')->on('health_workers')->onDelete('cascade');
+            $table->foreign('facility_id')->references('id')->on('facilities')->onDelete('cascade');
             $table->timestamps();
         });
     }
