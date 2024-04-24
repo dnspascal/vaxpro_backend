@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreign("ward_id")->references("id")->on("wards");
             $table->foreign("region_id")->references("id")->on("regions"); //region accounts
             $table->foreign("district_id")->references("id")->on("districts");// district accounts
-            $table->foreign("facility_id")->references("id")->on("facilities");
+            $table->foreign("facility_id")->references("facility_reg_no")->on("facilities");
             $table->timestamps();
 
             //region,district

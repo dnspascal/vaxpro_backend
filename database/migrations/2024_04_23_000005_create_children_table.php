@@ -17,15 +17,13 @@ return new class extends Migration
             $table->string('firstname');
             $table->string('middlename');
             $table->string('surname');
-            $table->integer('parent_id');
-            $table->integer('facility_id');
-            $table->integer('ward_id');
+            $table->string('facility_id');
+            $table->unsignedBigInteger('ward_id');
             $table->integer('address_name');
             $table->string('house_no');
             $table->date('date_of_birth');
             $table->string('modified_by');
             
-            $table->foreign('parent_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('facility_id')->references('facility_reg_no')->on('facilities')->onDelete('cascade');
             $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');
             $table->foreign('modified_by')->references('staff_id')->on('health_workers')->onDelete('cascade');

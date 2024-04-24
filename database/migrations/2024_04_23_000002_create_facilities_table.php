@@ -16,10 +16,9 @@ return new class extends Migration
             $table->string('facility_reg_no')->primary();//reg no
             $table->string('facility_name');
             $table->string('contacts');
-            $table->string('ward_id'); //foreign key for ward table
+            $table->unsignedBigInteger('ward_id'); //foreign key for ward table
             $table->unsignedBigInteger('modified_by'); // foreign key for user account
             $table->foreign('ward_id')->references('id')->on('wards');
-            $table->foreign('modified_by')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

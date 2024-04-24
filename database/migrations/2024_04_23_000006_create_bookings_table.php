@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('facility_id');
             $table->json('vaccine_list');
             $table->foreign('child_id')->references('card_no')->on('children')->onDelete('cascade');
-            $table->foreign('facility_id')->references('facility_reg_no')->on('facilties')->onDelete('cascade');
+            $table->foreign('facility_id')->references('facility_reg_no')->on('facilities')->onDelete('cascade');
             $table->timestamps();
         });
     }

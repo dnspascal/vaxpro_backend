@@ -9,7 +9,7 @@ class Facility extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['facility_reg_no','facility_name','contacts','ward_id','modified_by'];
+    protected $fillable = ['facility_reg_no','facility_name','contacts','ward_id',];
 
     public function bookings(){
         return $this->hasMany(Booking::class);
