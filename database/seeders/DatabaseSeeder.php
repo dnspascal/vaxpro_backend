@@ -2,8 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\District;
+use App\Models\Region;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Ward;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,9 +18,42 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
+
+        $json_region = file_get_contents(database_path('json/region.json'));
+        $data_region = json_decode($json_region, true);
+
+        $json_district = file_get_contents(database_path('json/district.json'));
+        $data_district = json_decode($json_district, true);
+
+        $json_ward = file_get_contents(database_path('json/ward.json'));
+        $data_ward = json_decode($json_ward, true);
+
+        foreach ($data_region["features"] as $region) {
+
+            Region::create(["region_name"=>$region["properties"]['region'] ]);
+        }
+
+        foreach ($data_district["features"] as $district) {
+            $region = Region::where('region_name',$district['properties']['region'])->first();
+            
+            if($region){
+
+                District::create(["region_id"=>$region->id,"district_name"=>$district["properties"]["District"] ]);
+            }
+        }
+
+        foreach ($data_ward["features"] as $ward) {
+            $district = District::where('district_name',$ward['properties']['District'])->first();
+            
+            if($district){
+
+                
+                Ward::create(["ward_name"=>$ward["properties"]['Ward'],"district_id"=>$district->id ]);
+            }
+         }
     }
 }

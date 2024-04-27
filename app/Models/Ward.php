@@ -10,11 +10,11 @@ class Ward extends Model
     use HasFactory;
     protected $fillable = ['district_id','ward_name'];
 
-    public function districts(){
+    public function district(){
         return $this->belongsTo(District::class);
     }
    
-    public function users(){
+    public function user(){
         return $this->hasMany(User::class);
     }
 
@@ -22,7 +22,7 @@ class Ward extends Model
         return $this->hasMany(ParentsGuardians::class);
     }
 
-    public function facilities(){
+    public function facility(){
         return $this->hasMany(Facility::class);
     }
 
