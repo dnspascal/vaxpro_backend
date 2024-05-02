@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('roles', function (Blueprint $table) {
-            $table->id();
+            $table->string("role_id")->primary();
             $table->string("role"); 
             $table->string("account_type"); // ministry,regional and district (identifies role level)
             $table->timestamps();
