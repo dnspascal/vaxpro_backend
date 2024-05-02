@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Vaccination extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','frequency','interval'];
+    protected $fillable = ['name','frequency','first_dose_after','second_dose_after','third_dose_after','fourth_dose_after','fifth_dose_after','vaccine_against','administered_via','side_effects'];
 
     public function children(){
         return $this->belongsToMany(Child::class,'child_vaccinations','vaccination_id','child_id');
