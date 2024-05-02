@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Child extends Model
 {
     use HasFactory;
-    protected $fillable = ['firstname','middlename','surname','parent_id','facility_id','ward_id','house_no','date_of_birth','modified_by'];
+    protected $fillable = ['card_no','firstname','middlename','surname','parent_id','facility_id','ward_id','house_no','date_of_birth','modified_by'];
 
     public function bookings(){
         return $this->hasMany(Booking::class);
