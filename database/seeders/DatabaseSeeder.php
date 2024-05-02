@@ -4,10 +4,12 @@ namespace Database\Seeders;
 
 use App\Models\District;
 use App\Models\Region;
+use App\Models\Role;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Ward;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,12 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        
 
         $json_region = file_get_contents(database_path('json/region.json'));
         $data_region = json_decode($json_region, true);
@@ -55,5 +52,17 @@ class DatabaseSeeder extends Seeder
                 Ward::create(["ward_name"=>$ward["properties"]['Ward'],"district_id"=>$district->id ]);
             }
          }
+
+        Role::create([
+            "role_id"=>"1000-1",
+            'role'=>'IT_ADMIN',
+            'account_type'=>'ministry'
+        ]);
+        User::factory()->create([
+            'role_id' => "1000-1",
+            'contacts'=>'+255745884099',
+            'password' => '12345',
+        ]);
+
     }
 }
