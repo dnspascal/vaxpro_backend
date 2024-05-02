@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\FacilityController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\WardController;
 use Illuminate\Http\Request;
@@ -31,7 +32,7 @@ Route::delete('district/{id}', [DistrictController::class,'destroy']);
 
 
 // wards endpoints
-Route::get('wards', [WardController::class,'showAll']);
+Route::post('wards', [WardController::class,'showAll']);
 Route::post('ward', [WardController::class,'create']);
 Route::get('ward/{id}', [WardController::class,'show']);
 Route::put('ward/{id}', [WardController::class,'update']);
@@ -43,3 +44,6 @@ Route::post('facility', [FacilityController::class,'create']);
 Route::get('facility/{id}', [FacilityController::class,'show']);
 Route::put('facility/{id}', [FacilityController::class,'update']);
 Route::delete('facility/{id}', [FacilityController::class,'destroy']);
+
+// send notification 
+Route::get('notification',[NotificationController::class,'sendSMS']);

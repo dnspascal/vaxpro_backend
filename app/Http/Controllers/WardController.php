@@ -8,10 +8,16 @@ use Illuminate\Http\Request;
 class WardController extends Controller
 {
     
-    public function showAll()
+    public function showAll(Request $request)
  {
-     $wards = Ward::all();
-     return response()->json($wards,200);
+    $searchQuery = $request->searchQuery;
+    
+
+    if(!empty($searchQuery)){
+        
+        $wards = Ward::where('ward_name','LIKE','%'.$searchQuery.'%')->with('district')->get();
+        return response()->json($wards,200);
+    }
  }
 
 
