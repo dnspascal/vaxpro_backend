@@ -11,15 +11,15 @@ class District extends Model
 
     protected $fillable = ['region_id','district_name',];
 
-    public function wards(){
+    public function ward(){
         return $this->hasMany(Ward::class);
 
     }
-    public function regions(){
+    public function region(){
         return $this->belongsTo(Region::class);
     }
 
-    public function users(){
+    public function user(){
         return $this->hasMany(User::class);
     }
 }

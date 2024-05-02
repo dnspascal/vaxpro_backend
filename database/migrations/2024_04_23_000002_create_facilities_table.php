@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('facility_name');
             $table->string('contacts');
             $table->unsignedBigInteger('ward_id'); //foreign key for ward table
-            $table->unsignedBigInteger('modified_by'); // foreign key for user account
             $table->foreign('ward_id')->references('id')->on('wards');
             $table->timestamps();
         });
