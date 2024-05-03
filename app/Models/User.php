@@ -10,7 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens,HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -18,6 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'uid',
         'role_id',
         'district_id',
         'region_id',
@@ -35,7 +36,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        
+
     ];
 
     /**
@@ -46,41 +47,53 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-           
+
             'password' => 'hashed',
         ];
     }
 
-    public function wards(){
+    public function wards()
+    {
         return $this->belongsTo(Ward::class);
     }
 
-    public function regions(){
+    public function region()
+    {
         return $this->belongsTo(Region::class);
     }
-    public function districts(){
+    public function district()
+    {
         return $this->belongsTo(District::class);
     }
 
-    public function facilities(){
-        return $this->belongsTo(Facility::class,'facility_id','facility_reg_no');
+    public function facilities()
+    {
+        return $this->belongsTo(Facility::class, 'facility_id', 'facility_reg_no');
     }
 
-    public function health_workers(){
+    public function health_workers()
+    {
         return $this->hasMany(HealthWorker::class);
     }
 
-    public function children(){
+    public function children()
+    {
         return $this->hasMany(Child::class);
     }
 
 
     //user who adds the facility
-    public function modified_by(){
+    public function modified_by()
+    {
         return $this->hasMany(Facility::class);
     }
 
-    public function role(){
-        return $this->belongsTo(Role::class, "role_id","role_id");
+    public function role()
+    {
+        return $this->belongsTo(Role::class, "role_id");
+    }
+    public function parentGuardian()
+    {
+        return $this->hasMany(ParentsGuardians::class);
     }
 }

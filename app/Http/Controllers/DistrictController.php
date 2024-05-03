@@ -70,6 +70,16 @@ public function show_facilities(string $id)
     return response()->json(['message'=>"district not found"],404);
 }
 
+public function region_districts(Request $request){
+    $districts = District::where("region_id", $request->region_id)->get();
+    
+    if($districts->isNotEmpty()){
+        return response()->json($districts, 200);
+    }else{
+        return response()->json(["message"=> "There are no district", "status"=>409]);
+    }
+}
+
  public function update(string $id,Request $request)
  {
      $district = District::find($id);

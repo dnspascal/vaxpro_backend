@@ -9,6 +9,7 @@ use App\Http\Controllers\WardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ChildController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\VaccinationSchedules;
 use Illuminate\Http\Request;
@@ -26,18 +27,25 @@ Route::get('generateSchedule', [VaccinationSchedules::class, 'vaccine']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', [UserController::class, 'userData']);
+    //auth endpoints
     Route::post('/register', [AuthController::class,'register']);
+
+    //user endpoints
+    Route::get('/user', [UserController::class, 'userData']);
+    Route::delete('/user/{id}', [UserController::class,'destroy']);
     Route::get('/all_users', [UserController::class,'allUsers']);
+
+    //address endpoints
+    Route::get('/regions', [RegionController::class,'showAll']);
+    Route::get('region_districts/{region_id}', [DistrictController::class,'region_districts']);
+
+    //roles endpoints
+    Route::get("/roles",[RoleController::class,"index"]);
 });
 
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
 // regions endpoints
-Route::get('regions', [RegionController::class,'showAll']);
 Route::post('region', [RegionController::class,'create']);
 Route::get('region/{id}', [RegionController::class,'show']);
 Route::put('region/{id}', [RegionController::class,'update']);

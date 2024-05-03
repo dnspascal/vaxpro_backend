@@ -12,9 +12,25 @@ class UserController extends Controller
     public function userData()
     {
         if (Auth::check()) {
+            $user = Auth::user();
             $user = array();
             $user = Auth::user();
             $user['role'] = Auth::user()->role;
+
+
+            if (!is_null($user->region_id)) {
+                $user['region'] = Auth::user()->region;
+                return response()->json([$user]);
+            }
+
+            if (!is_null($user->district_id)) {
+                $user['district'] = Auth::user()->district->region;
+
+
+                return response()->json([$user]);
+
+            }
+
             return response()->json([$user]);
         }
         return response()->json(["message" => "user not authenticated"], 401);
@@ -22,12 +38,19 @@ class UserController extends Controller
 
     public function allUsers(Request $request)
     {
-    
-        $allUsers = User::with([
-          'role',
-          
-        ])->get();
-       return  $allUsers;
 
+        $allUsers = User::with(['role'])->get();
+        return  $allUsers;
+    }
+
+    public function destroy(string $id)
+    {
+        $user = User::find($id);
+
+        if ($user) {
+            $user->delete();
+            return response()->json(['user deleted'], 204);
+        }
+        return response()->json(['message' => "user not found"], 404);
     }
 }
