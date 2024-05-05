@@ -14,12 +14,15 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
+
         if ($request->has("ward_id")) {
+
             if (User::where('role_id', $request->input('role_id'))
                 ->Where('ward_id', $request->input('ward_id'))
                 ->doesntExist()
             ) {
-                $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, $request->ward_id, null, null);
+                $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, null, $request->ward_id);
+            } else if (Role::where('id', $request->role_id)) {
             } else {
                 return response()->json(['message' => 'This account exists ward', 'status' => 409]);
             }

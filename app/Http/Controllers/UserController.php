@@ -17,19 +17,18 @@ class UserController extends Controller
             $user = Auth::user();
             $user['role'] = Auth::user()->role;
 
+            if (!is_null($user->district_id)) {
+                $user['district'] = Auth::user()->district->region;
 
+                return response()->json([$user]);
+            }
             if (!is_null($user->region_id)) {
                 $user['region'] = Auth::user()->region;
                 return response()->json([$user]);
             }
 
-            if (!is_null($user->district_id)) {
-                $user['district'] = Auth::user()->district->region;
 
 
-                return response()->json([$user]);
-
-            }
 
             return response()->json([$user]);
         }
@@ -38,8 +37,24 @@ class UserController extends Controller
 
     public function allUsers(Request $request)
     {
+        $loggedInUser = User::find($request->id);
+        switch ($loggedInUser->role->account_type) {
+            case "ministry":
 
-        $allUsers = User::with(['role'])->get();
+                return $allUsers = User::whereHas('role', function ($query) {
+                    $query->where('account_type', "ministry")
+                        ->orWhere('account_type', 'regional');
+                })->with(['role', 'district', 'region'])->get();
+
+            case "district":
+                return $allUsers = User::whereHas('role', function ($query) {
+                    $query->where('account_type', "district")
+                        ->orWhere('account_type', 'community_health_worker')
+                        ->orWhere('account_type', 'branch_admin');
+                })->with(['role', 'district', 'ward'])->get();
+        }
+        $allUsers = User::with(['role', 'district', 'region'])->get();
+
         return  $allUsers;
     }
 

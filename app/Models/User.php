@@ -52,7 +52,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function wards()
+    public function ward()
     {
         return $this->belongsTo(Ward::class);
     }

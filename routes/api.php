@@ -33,11 +33,12 @@ Route::middleware('auth:sanctum')->group(function () {
     //user endpoints
     Route::get('/user', [UserController::class, 'userData']);
     Route::delete('/user/{id}', [UserController::class,'destroy']);
-    Route::get('/all_users', [UserController::class,'allUsers']);
+    Route::get('/all_users/{id}', [UserController::class,'allUsers']);
 
     //address endpoints
     Route::get('/regions', [RegionController::class,'showAll']);
     Route::get('region_districts/{region_id}', [DistrictController::class,'region_districts']);
+    Route::get('districts_wards/{district_id}', [WardController::class,'districts_wards']);
 
     //roles endpoints
     Route::get("/roles",[RoleController::class,"index"]);
