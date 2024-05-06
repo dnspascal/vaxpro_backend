@@ -52,6 +52,12 @@ class UserController extends Controller
                         ->orWhere('account_type', 'community_health_worker')
                         ->orWhere('account_type', 'branch_admin');
                 })->with(['role', 'district', 'ward'])->get();
+            case 'regional':
+                return $allUsers = User::whereHas('role', function ($query) {
+                    $query->where('account_type', "regional")
+                        ->orWhere('account_type', 'district');
+                       
+                })->with(['role', 'district', 'ward'])->get();
         }
         $allUsers = User::with(['role', 'district', 'region'])->get();
 
