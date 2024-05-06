@@ -6,7 +6,7 @@ use App\Models\Vaccination;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-class VaccinationSchedules extends Controller
+class VaccinationSchedulesController extends Controller
 {
     public function vaccine(Request $request)
     {

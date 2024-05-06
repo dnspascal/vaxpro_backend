@@ -2,35 +2,149 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GeneratePasswordHelper;
+use App\Helpers\GenerateRoleIdHelper;
 use App\Models\Child;
+use App\Models\ChildVaccination;
+use App\Models\Vaccination;
+use App\Models\ParentsGuardians;
 use App\Models\ParentsGuardiansChild;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Role;
 
 class ChildController extends Controller
 {
     public function parentChildData(Request $request)
     {
-        $child = Child::create([
-            'card_no' => $request->card_no,
-            'firstname' => $request->first_name,
-            'middlename' => $request->middle_name,
-            'lastname' => $request->last_name,
-            'date_of_birth' => $request->birth_date,
-            'house_no' => $request->house_no,
-            'ward_id' => $request->ward_id
-        ]);
+        $ward_id = explode('-', $request->ward_id);
+        $ward_id = end($ward_id);
+        $ward_id = (int) $ward_id;
 
-        //parent info here......
-
-       
-
-        ParentsGuardiansChild::create([
-            'parents_guardians_id' => '',
-            'child_id'=>$child->id,
-            'relationship_with_child'=>$request->relation,
-
-        ]);
+        $childExists = Child::where('card_no', $request->card_no)->exists();
+        $parentExists = ParentsGuardians::where('nida_id', $request->nida_id)->exists();
+        $parentData = ParentsGuardians::where('nida_id', $request->nida_id)->first();
 
 
+        if (!$childExists && !$parentExists) {
+            $child = Child::create([
+                'card_no' => $request->card_no,
+                'firstname' => $request->first_name,
+                'middlename' => $request->middle_name,
+                'surname' => $request->last_name,
+                'date_of_birth' => $request->birth_date,
+                'house_no' => $request->house_no,
+                'ward_id' => $ward_id,
+                'address_name' => 1, //to be omitted
+                'facility_id' => 'T2408-054-393',
+                'modified_by' => '2021-04-06692'
+            ]);
+
+
+            $password = GeneratePasswordHelper::generatePassword();
+
+            $user_role = Role::where('account_type', 'parent')->value('role_id');
+
+            $user = User::create([
+                'role_id' => $user_role,
+                'contacts' => $request->contact,
+                'password' => Hash::make($password)
+            ]);
+
+            $parent = ParentsGuardians::create([
+                'nida_id' => $request->nida_id,
+                'firstname' => $request->par_first_name,
+                'middlename' => $request->par_middle_name,
+                'lastname' => $request->par_last_name,
+                'user_id' => $user->id
+
+            ]);
+
+            ParentsGuardiansChild::create([
+                'parents_guardians_id' => $parent->nida_id,
+                'child_id' => $child->card_no,
+                'relationship_with_child' => $request->relation,
+            ]);
+
+            return response()->json([
+                'message' => 'Data saved successfully!',
+                'status' => 200,
+            ]);
+        } elseif (!$childExists && $parentExists) {
+            $child = Child::create([
+                'card_no' => $request->card_no,
+                'firstname' => $request->first_name,
+                'middlename' => $request->middle_name,
+                'surname' => $request->last_name,
+                'date_of_birth' => $request->birth_date,
+                'house_no' => $request->house_no,
+                'ward_id' => $ward_id,
+                'address_name' => 1, //to be omitted
+                'facility_id' => 'T2408-054-393',
+                'modified_by' => '2021-04-06692'
+            ]);
+
+            ParentsGuardiansChild::create([
+                'parents_guardians_id' => $parentData->nida_id,
+                'child_id' => $child->card_no,
+                'relationship_with_child' => 'parent',
+            ]);
+
+            return response()->json([
+                'message' => 'Child added successfully!',
+                'status' => 200,
+            ]);
+        }
+    }
+
+    public function children(Request $request)
+    {
+        $card_no = $request->cardNo;
+
+        if (!empty($card_no)) {
+            $children = Child::where('card_no', 'LIKE', '%' . $card_no . '%')->with('parents_guardians')->get();
+
+            return response()->json($children, 200);
+        }
+    }
+
+    public function getChildData($id)
+    {
+        if ($id) {
+            $child_data = Child::where('card_no', $id)
+                ->with([
+                    'parents_guardians' => function ($query) {
+                        $query->withPivot('relationship_with_child');
+                    },
+                    'parents_guardians.user',
+                    'ward.district.region'
+                ])
+                ->get();
+            return response()->json($child_data, 200);
+        }
+    }
+
+    public function getChildVaccines($id)
+    {
+        $vaccines = Vaccination::all();
+        $child_vaccination = ChildVaccination::where('child_id', $id)->first();
+        if ($child_vaccination) {
+            $vaccineArray = array();
+            foreach ($vaccines as $vaccine) {
+                if ($vaccine->id != $child_vaccination->vaccination_id) {
+                    $vaccineArray[] = $vaccine;
+                }
+            }
+            return response()->json([
+                'vaccines' => $vaccineArray,
+                'status' => 200
+            ]);
+        } else {
+            return response()->json([
+                'vaccines' => $vaccines,
+                'status' => 200
+            ]);
+        }
     }
 }

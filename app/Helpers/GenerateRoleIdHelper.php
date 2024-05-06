@@ -18,11 +18,12 @@ class GenerateRoleIdHelper
                         ? Role::where('role_id', 'LIKE', '4000%')->pluck('role_id')->toArray()
                         : (($account_type === "health_worker")
                             ? Role::where('role_id', 'LIKE', '5000%')->pluck('role_id')->toArray()
-                            :
-                            [])
+                            : (($account_type === "parent")
+                                ? Role::where('role_id', 'LIKE', '6000%')->pluck('role_id')->toArray()
+                                : [])
+                        )
                     )
-                )
-            );
+                ));
 
         $suffixes = [];
         foreach ($roleIds as $roleId) {
@@ -34,7 +35,10 @@ class GenerateRoleIdHelper
             : (($account_type === "regional") ? $roleId = '2000-' . $maxSuffix
                 : (($account_type === 'district') ? $roleId = '3000-' . $maxSuffix
                     : (($account_type === "branch_manager") ?  $roleId = '4000-' . $maxSuffix
-                        : (($account_type === "health_worker") ? $roleId = "5000-" . $maxSuffix : 0))
+                        : (($account_type === "health_worker") ? $roleId = "5000-" . $maxSuffix
+                            : (($account_type === "parent") ? $roleId = "6000-" . $maxSuffix
+
+                                : 0)))
 
                 )
             );

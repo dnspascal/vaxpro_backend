@@ -15,7 +15,7 @@ return new class extends Migration
            
             $table->string('staff_id')->primary(); // primary key
             $table->string('first_name');
-            $table->string('f_name');
+            $table->string('last_name');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
