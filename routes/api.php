@@ -11,10 +11,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ChildController;
 use App\Http\Controllers\SMSController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\VaccinationSchedules;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Route;
 
 Route::post('createVaccine', [VaccinationController::class, 'createVaccine']);
@@ -28,18 +28,26 @@ Route::get('generateSchedule', [VaccinationSchedules::class, 'vaccine']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', [UserController::class, 'userData']);
+    //auth endpoints
     Route::post('/register', [AuthController::class,'register']);
-    Route::get('/all_users', [UserController::class,'allUsers']);
+
+    //user endpoints
+    Route::get('/user', [UserController::class, 'userData']);
+    Route::delete('/user/{id}', [UserController::class,'destroy']);
+    Route::get('/all_users/{id}', [UserController::class,'allUsers']);
+
+    //address endpoints
+    Route::get('/regions', [RegionController::class,'showAll']);
+    Route::get('region_districts/{region_id}', [DistrictController::class,'region_districts']);
+    Route::get('districts_wards/{district_id}', [WardController::class,'districts_wards']);
+
+    //roles endpoints
+    Route::get("/roles",[RoleController::class,"index"]);
 });
 
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
 // regions endpoints
-Route::get('regions', [RegionController::class,'showAll']);
 Route::post('region', [RegionController::class,'create']);
 Route::get('region/{id}', [RegionController::class,'show']);
 Route::put('region/{id}', [RegionController::class,'update']);

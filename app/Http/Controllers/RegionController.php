@@ -18,7 +18,7 @@ class RegionController extends Controller
   
     public function create(Request $request)
     {
-        //
+        
         $existing_region = Region::where("region_name", $request->region_name)->first();
         if ($existing_region) {
         
@@ -26,7 +26,6 @@ class RegionController extends Controller
         }
         $region = Region::create($request->only(['region_name']));
        
-
         return response()->json(['message'=>'region created successfull'],200);
     }
 
@@ -41,6 +40,7 @@ class RegionController extends Controller
         return response()->json(['message'=>"Region not found"],404);
     }
 
+   
    
     public function update(string $id,Request $request)
     {

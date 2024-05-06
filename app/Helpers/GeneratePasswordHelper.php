@@ -3,7 +3,7 @@
 namespace App\Helpers;
 class GeneratePasswordHelper {
     public static function generatePassword() {
-        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&$£@*!_?';
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         $password='';
 
         for( $i = 0; $i < 8; $i++ ){

@@ -41,11 +41,22 @@ class WardController extends Controller
      $ward = Ward::find($id);
 
      if($ward){
+
          return response()->json($ward,200);
+
      }
      return response()->json(['message'=>"ward not found"],404);
  }
 
+ public function districts_wards(Request $request){
+    $wards = Ward::where("district_id", $request->district_id)->get();
+    
+    if($wards->isNotEmpty()){
+        return response()->json($wards, 200);
+    }else{
+        return response()->json(["message"=> "There are no wards", "status"=>409]);
+    }
+}
 
  public function update(string $id,Request $request)
  {
