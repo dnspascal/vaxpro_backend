@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\ParentController;
@@ -9,6 +10,8 @@ use App\Http\Controllers\WardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ChildController;
+use App\Http\Controllers\SMSController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\VaccinationSchedulesController;
 use Illuminate\Http\Request;
@@ -29,18 +32,28 @@ Route::get('getChildData/{id}', [ChildController::class, 'getChildData']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', [UserController::class, 'userData']);
+    
+    //auth endpoints
     Route::post('/register', [AuthController::class,'register']);
-    Route::get('/all_users', [UserController::class,'allUsers']);
+    Route::patch('update_user/{id}', [AuthController::class,'update']);
+
+    //user endpoints
+    Route::get('/user', [UserController::class, 'userData']);
+    Route::delete('/user/{id}', [UserController::class,'destroy']);
+    Route::get('/all_users/{id}', [UserController::class,'allUsers']);
+
+    //address endpoints
+    Route::get('/regions', [RegionController::class,'showAll']);
+    Route::get('region_districts/{region_id}', [DistrictController::class,'region_districts']);
+    Route::get('districts_wards/{district_id}', [WardController::class,'districts_wards']);
+
+    //roles endpoints
+    Route::get("/roles",[RoleController::class,"index"]);
 });
 
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
 // regions endpoints
-Route::get('regions', [RegionController::class,'showAll']);
 Route::post('region', [RegionController::class,'create']);
 Route::get('region/{id}', [RegionController::class,'show']);
 Route::put('region/{id}', [RegionController::class,'update']);
@@ -70,6 +83,13 @@ Route::get('facility/{id}', [FacilityController::class,'show']);
 Route::put('facility/{id}', [FacilityController::class,'update']);
 Route::delete('facility/{id}', [FacilityController::class,'destroy']);
 
+
+// send sms 
+Route::get('send_sms',[SMSController::class,'sendSms']);
+
+
+// booking endpoints
+Route::post('add_booking',[BookingController::class,'store']);
 
 Route::post('/login', [AuthController::class, 'login']);
 

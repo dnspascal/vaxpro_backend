@@ -12,9 +12,24 @@ class UserController extends Controller
     public function userData()
     {
         if (Auth::check()) {
+            $user = Auth::user();
             $user = array();
             $user = Auth::user();
             $user['role'] = Auth::user()->role;
+
+            if (!is_null($user->district_id)) {
+                $user['district'] = Auth::user()->district->region;
+
+                return response()->json([$user]);
+            }
+            if (!is_null($user->region_id)) {
+                $user['region'] = Auth::user()->region;
+                return response()->json([$user]);
+            }
+
+
+
+
             return response()->json([$user]);
         }
         return response()->json(["message" => "user not authenticated"], 401);
@@ -22,12 +37,41 @@ class UserController extends Controller
 
     public function allUsers(Request $request)
     {
-    
-        $allUsers = User::with([
-          'role',
-          
-        ])->get();
-       return  $allUsers;
+        $loggedInUser = User::find($request->id);
+        switch ($loggedInUser->role->account_type) {
+            case "ministry":
 
+                return $allUsers = User::whereHas('role', function ($query) {
+                    $query->where('account_type', "ministry")
+                        ->orWhere('account_type', 'regional');
+                })->with(['role', 'district', 'region'])->get();
+
+            case "district":
+                return $allUsers = User::whereHas('role', function ($query) {
+                    $query->where('account_type', "district")
+                        ->orWhere('account_type', 'community_health_worker')
+                        ->orWhere('account_type', 'branch_admin');
+                })->with(['role', 'district', 'ward'])->get();
+            case 'regional':
+                return $allUsers = User::whereHas('role', function ($query) {
+                    $query->where('account_type', "regional")
+                        ->orWhere('account_type', 'district');
+                       
+                })->with(['role', 'district', 'ward'])->get();
+        }
+        $allUsers = User::with(['role', 'district', 'region'])->get();
+
+        return  $allUsers;
+    }
+
+    public function destroy(string $id)
+    {
+        $user = User::find($id);
+
+        if ($user) {
+            $user->delete();
+            return response()->json(['user deleted'], 204);
+        }
+        return response()->json(['message' => "user not found"], 404);
     }
 }

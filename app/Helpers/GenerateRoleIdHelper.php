@@ -2,47 +2,57 @@
 
 namespace App\Helpers;
 
-use App\Models\Role;
+use App\Models\User;
+use App\Models\Region;
 
 class GenerateRoleIdHelper
 {
-    public static function generateRoleId($account_type)
+    public static function generateRoleId($account_type, $region_id, $district_id, $ward_id)
     {
-        $roleIds = ($account_type === "ministry")
-            ? Role::where('role_id', 'LIKE', '1000%')->pluck('role_id')->toArray()
+
+        $uids = ($account_type === "ministry")
+            ? User::where('uid', 'LIKE', '1000%')->pluck('uid')->toArray()
             : (($account_type === "regional")
-                ? Role::where('role_id', 'LIKE', '2000%')->pluck('role_id')->toArray()
+                ? User::where('uid', 'LIKE', "2000-{$region_id}%")->pluck('uid')->toArray()
                 : (($account_type === "district")
-                    ? Role::where('role_id', 'LIKE', '3000%')->pluck('role_id')->toArray()
+                    ? User::where('uid', 'LIKE', "3000-{$district_id}%")->pluck('uid')->toArray()
                     : (($account_type === "branch_manager")
-                        ? Role::where('role_id', 'LIKE', '4000%')->pluck('role_id')->toArray()
+                        ? User::where('uid', 'LIKE', "4000-{$ward_id}%")->pluck('uid')->toArray()
                         : (($account_type === "health_worker")
-                            ? Role::where('role_id', 'LIKE', '5000%')->pluck('role_id')->toArray()
-                            : (($account_type === "parent")
-                                ? Role::where('role_id', 'LIKE', '6000%')->pluck('role_id')->toArray()
-                                : [])
-                        )
+
+                            ? User::where('uid', 'LIKE', "5000-{$ward_id}%")->pluck('uid')->toArray()
+                            : (($account_type === "community_health_worker")
+                                ? User::where("uid", "LIKE", "6000-{$ward_id}")->pluck('uid')->toArray()
+                                : (($account_type === "parent")
+                                    ? User::where("uid", "LIKE", "7000-{$ward_id}")->pluck("uid")->toArray()
+                                    :
+                                    [])))
+
                     )
                 ));
 
+
         $suffixes = [];
-        foreach ($roleIds as $roleId) {
-            $suffixes[] = (int) explode('-', $roleId)[1];
+        foreach ($uids as $uid) {
+            $suffixes[] = (int) explode('-', $uid)[2];
         }
-        $maxSuffix = $suffixes ? max($suffixes) + 1 : 0;
+        $maxSuffix = $suffixes ? max($suffixes) + 1 : 1;
 
-        ($account_type === "ministry") ?  $roleId = '1000-' . $maxSuffix
-            : (($account_type === "regional") ? $roleId = '2000-' . $maxSuffix
-                : (($account_type === 'district') ? $roleId = '3000-' . $maxSuffix
-                    : (($account_type === "branch_manager") ?  $roleId = '4000-' . $maxSuffix
-                        : (($account_type === "health_worker") ? $roleId = "5000-" . $maxSuffix
-                            : (($account_type === "parent") ? $roleId = "6000-" . $maxSuffix
+        ($account_type === "ministry") ?  $uid = '1000-' . "1" . "-" . $maxSuffix
+            : (($account_type === "regional") ? $uid = '2000-' . $region_id . "-" . $maxSuffix
+                : (($account_type === 'district') ? $uid = '3000-' . $district_id . "-" . $maxSuffix
+                    : (($account_type === "branch_manager") ?  $uid = '4000-' . $ward_id . "-" . $maxSuffix
+                        : (($account_type === "health_worker") ? $uid = "5000-" . $ward_id . "-" . $maxSuffix
+                            : (($account_type === "community_health_worker") ? $uid = "6000-" . $ward_id . "-" . $maxSuffix
+                                : (($account_type === "parent") ? $uid = "7000-" . $ward_id . "-" . $maxSuffix
+                                    : null)
 
-                                : 0)))
+                            )))
+
 
                 )
             );
 
-        return $roleId;
+        return $uid;
     }
 }

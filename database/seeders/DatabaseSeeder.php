@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\District;
+use App\Models\Facility;
 use App\Models\Region;
 use App\Models\Role;
 use App\Models\User;
@@ -18,7 +19,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        
+
+        $facilities = file_get_contents(database_path('json/facilities.json'));
+        $data_facilities = json_decode($facilities, true);
+
 
         $json_region = file_get_contents(database_path('json/region.json'));
         $data_region = json_decode($json_region, true);
@@ -29,40 +33,51 @@ class DatabaseSeeder extends Seeder
         $json_ward = file_get_contents(database_path('json/ward.json'));
         $data_ward = json_decode($json_ward, true);
 
+
+        $json_roles = file_get_contents(database_path('json/roles.json'));
+        $roles = json_decode($json_roles, true);
+
+
         foreach ($data_region["features"] as $region) {
 
-            Region::create(["region_name"=>$region["properties"]['region'] ]);
+            Region::create(["region_name" => $region["properties"]['region']]);
         }
 
         foreach ($data_district["features"] as $district) {
-            $region = Region::where('region_name',$district['properties']['region'])->first();
-            
-            if($region){
+            $region = Region::where('region_name', $district['properties']['region'])->first();
 
-                District::create(["region_id"=>$region->id,"district_name"=>$district["properties"]["District"] ]);
+            if ($region) {
+
+                District::create(["region_id" => $region->id, "district_name" => $district["properties"]["District"]]);
             }
         }
 
         foreach ($data_ward["features"] as $ward) {
-            $district = District::where('district_name',$ward['properties']['District'])->first();
-            
-            if($district){
+            $district = District::where('district_name', $ward['properties']['District'])->first();
 
-                
-                Ward::create(["ward_name"=>$ward["properties"]['Ward'],"district_id"=>$district->id ]);
+            if ($district) {
+
+
+                Ward::create(["ward_name" => $ward["properties"]['Ward'], "district_id" => $district->id]);
             }
-         }
+        }
 
-        Role::create([
-            "role_id"=>"1000-1",
-            'role'=>'IT_ADMIN',
-            'account_type'=>'ministry'
-        ]);
+
+         foreach ($data_facilities as $facility) {
+
+            Facility::create(["facility_reg_no"=>$facility["facility_reg_no"],"facility_name"=>$facility["facility_name"],"contacts"=>$facility["contacts"],"ward_id"=>$facility["ward_id"] ]);
+        }
+
+
+        foreach ($roles["roles"] as $role) {
+            Role::create(["role" => $role["name"], "account_type" => $role["account_type"]]);
+        }
+
         User::factory()->create([
-            'role_id' => "1000-1",
-            'contacts'=>'+255745884099',
+            'uid' => "1000-1-1",
+            "role_id" => 1,
+            'contacts' => '+255745884099',
             'password' => '12345',
         ]);
-
     }
 }

@@ -9,6 +9,7 @@ class ParentsGuardians extends Model
 {
     use HasFactory;
 
+
     protected $primaryKey = 'nida_id';
 
     protected $fillable = ['user_id', 'nida_id', 'firstname', 'middlename', 'lastname'];
@@ -22,5 +23,6 @@ class ParentsGuardians extends Model
     public function child()
     {
         return $this->belongsToMany(Child::class, 'parents_guardians_children', 'parents_guardians_id', 'child_id');
+
     }
 }

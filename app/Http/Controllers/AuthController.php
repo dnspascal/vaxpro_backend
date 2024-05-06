@@ -14,17 +14,54 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $roleId = GenerateRoleIdHelper::generateRoleId($request->account_type);
 
-        $role =  Role::create([
-            'role_id' => $roleId,
-            'role' => $request->role,
-            'account_type' => $request->account_type,
-        ]);
-        if ($role) {
-            $password = GeneratePasswordHelper::generatePassword();
+        if ($request->has("ward_id")) {
+
+            if (User::where('role_id', $request->input('role_id'))
+                ->Where('ward_id', $request->input('ward_id'))
+                ->doesntExist()
+            ) {
+                $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, null, $request->ward_id);
+            } else if (Role::where('id', $request->role_id)) {
+            } else {
+                return response()->json(['message' => 'This account exists ward', 'status' => 409]);
+            }
+        } else if ($request->has("district_id")) {
+            if (User::where('role_id', $request->input('role_id'))
+                ->Where('district_id', $request->input('district_id'))
+                ->doesntExist()
+            ) {
+                $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, $request->district_id, null);
+            } else {
+                return response()->json(["message" => "This account exists district", 'status' => 409]);
+            }
+        } else if ($request->has("region_id")) {
+            if (User::where('role_id', $request->input('role_id'))
+                ->Where('region_id', $request->input('region_id'))
+                ->doesntExist()
+            ) {
+                $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, $request->region_id, null, null);
+            } else {
+                return response()->json(["message" => "This account exists region", 'status' => 409]);
+            }
+        } else {
+            if (User::where('role_id', $request->input('role_id'))
+                ->doesntExist()
+            ) {
+                $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, null, null);
+            } else {
+                return response()->json(['message' => 'This account exists ministry', 'status' => 409]);
+            }
+        };
+
+
+        $password = GeneratePasswordHelper::generatePassword();
+
+        if ($uid && $password) {
+            $user = User::find($uid);
             $user = User::create([
-                'role_id' => $role->role_id,
+                'uid' => $uid,
+                "role_id" => $request->role_id,
                 'password' => Hash::make($password),
                 'ward_id' => $request->ward_id,
                 'district_id' => $request->district_id,
@@ -32,14 +69,31 @@ class AuthController extends Controller
                 'facility_id' => $request->facility_id,
                 'contacts' => $request->contacts,
             ]);
-            return response()->json(['message' => "User successfully added", $password, "status"=>200]);
-        } else {
-            return response()->json(["message" => "Error occured, Please try again", "status"=>401]);
         }
+        if ($user) {
+
+            return response()->json(['message' => "User successfully added", $password, "status" => 200]);
+        } else {
+            return response()->json(["message" => "Error occured, Please try again", "status" => 401]);
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user  =  User::find($id);
+
+        if ($request->has('contacts')) {
+            $user->contacts = $request->contacts;
+        }
+
+
+        $user->save();
+
+        return response()->json(["message" => "user successfully updated"]);
     }
     public function login(Request $request)
     {
-        $credentials = $request->only(["role_id", "password"]);
+        $credentials = $request->only(["uid", "password"]);
 
         if (Auth::attempt($credentials)) {
 
@@ -52,10 +106,8 @@ class AuthController extends Controller
             ]);
         } else
             return response()->json([
-                "token" => "2345678",
                 "message" => "user not found",
                 "status" => 404,
             ]);
     }
-   
 }
