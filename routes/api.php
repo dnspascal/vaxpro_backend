@@ -4,7 +4,7 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\FacilityController;
-use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ParentController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\WardController;
 use App\Http\Controllers\AuthController;
@@ -13,7 +13,7 @@ use App\Http\Controllers\ChildController;
 use App\Http\Controllers\SMSController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\VaccinationController;
-use App\Http\Controllers\VaccinationSchedules;
+use App\Http\Controllers\VaccinationSchedulesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +23,11 @@ Route::get('getVaccine/{id}', [VaccinationController::class, 'getVaccine']);
 Route::put('updateVaccine/{id}', [VaccinationController::class, 'updateVaccine']);
 Route::delete('deleteVaccine/{id}', [VaccinationController::class, 'deleteVaccine']);
 Route::post('parentChildData', [ChildController::class, 'parentChildData']);
-Route::get('generateSchedule', [VaccinationSchedules::class, 'vaccine']);
+Route::get('generateSchedule', [VaccinationSchedulesController::class, 'vaccine']);
+Route::get('getChildParentData', [ChildController::class, 'getChildParentData']);
+Route::get('children', [ChildController::class,'children']);
+Route::get('parents', [ParentController::class,'parents']);
+Route::get('getChildData/{id}', [ChildController::class, 'getChildData']);
 
 
 
@@ -66,7 +70,7 @@ Route::delete('district/{id}', [DistrictController::class,'destroy']);
 
 
 // wards endpoints
-Route::post('wards', [WardController::class,'showAll']);
+Route::get('wards', [WardController::class,'showAll']);
 Route::post('ward', [WardController::class,'create']);
 Route::get('ward/{id}', [WardController::class,'show']);
 Route::put('ward/{id}', [WardController::class,'update']);

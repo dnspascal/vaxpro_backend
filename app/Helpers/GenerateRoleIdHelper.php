@@ -19,6 +19,7 @@ class GenerateRoleIdHelper
                     : (($account_type === "branch_manager")
                         ? User::where('uid', 'LIKE', "4000-{$ward_id}%")->pluck('uid')->toArray()
                         : (($account_type === "health_worker")
+
                             ? User::where('uid', 'LIKE', "5000-{$ward_id}%")->pluck('uid')->toArray()
                             : (($account_type === "community_health_worker")
                                 ? User::where("uid", "LIKE", "6000-{$ward_id}")->pluck('uid')->toArray()
@@ -26,9 +27,9 @@ class GenerateRoleIdHelper
                                     ? User::where("uid", "LIKE", "7000-{$ward_id}")->pluck("uid")->toArray()
                                     :
                                     [])))
+
                     )
-                )
-            );
+                ));
 
 
         $suffixes = [];
@@ -47,6 +48,7 @@ class GenerateRoleIdHelper
                                     : null)
 
                             )))
+
 
                 )
             );
