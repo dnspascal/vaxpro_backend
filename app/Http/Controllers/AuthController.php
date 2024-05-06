@@ -77,12 +77,25 @@ class AuthController extends Controller
             return response()->json(["message" => "Error occured, Please try again", "status" => 401]);
         }
     }
+
+    public function update(Request $request, $id)
+    {
+        $user  =  User::find($id);
+
+        if ($request->has('contacts')) {
+            $user->contacts = $request->contacts;
+        }
+
+
+        $user->save();
+
+        return response()->json(["message" => "user successfully updated"]);
+    }
     public function login(Request $request)
     {
         $credentials = $request->only(["uid", "password"]);
 
         if (Auth::attempt($credentials)) {
-
 
             $token  = $request->user()->createToken("API value")->plainTextToken;
 
