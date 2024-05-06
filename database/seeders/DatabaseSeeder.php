@@ -69,12 +69,6 @@ class DatabaseSeeder extends Seeder
         }
 
 
-        Role::create([
-            "role_id"=>"1000-1",
-            'role'=>'IT_ADMIN',
-            'account_type'=>'ministry'
-        ]);
-
         foreach ($roles["roles"] as $role) {
             Role::create(["role" => $role["name"], "account_type" => $role["account_type"]]);
         }
