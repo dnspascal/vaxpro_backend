@@ -27,8 +27,10 @@ Route::get('generateSchedule', [VaccinationSchedules::class, 'vaccine']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
+    
     //auth endpoints
     Route::post('/register', [AuthController::class,'register']);
+    Route::patch('update_user/{id}', [AuthController::class,'update']);
 
     //user endpoints
     Route::get('/user', [UserController::class, 'userData']);
