@@ -41,7 +41,9 @@ class WardController extends Controller
      $ward = Ward::find($id);
 
      if($ward){
-         return response()->json(['ward'=>$ward, $ward->facility],200);
+
+         return response()->json($ward,200);
+
      }
      return response()->json(['message'=>"ward not found"],404);
  }

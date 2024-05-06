@@ -1,0 +1,428 @@
+
+[
+    {
+        "facility_reg_no": "123705-1",
+        "facility_name": "Muhimbili National Hospital",
+        "contacts": "+255 22 215 0000",
+        "ward_id": 1
+    },
+    {
+        "facility_reg_no": "123705-2",
+        "facility_name": "Bugando Medical Centre",
+        "contacts": "+255 28 250 0881",
+        "ward_id": 2
+    },
+    {
+        "facility_reg_no": "123705-3",
+        "facility_name": "Kilimanjaro Christian Medical Centre",
+        "contacts": "+255 27 275 4377",
+        "ward_id": 3
+    },
+    {
+        "facility_reg_no": "123705-4",
+        "facility_name": "Aga Khan Hospital",
+        "contacts": "+255 22 211 5151",
+        "ward_id": 4
+    },
+    {
+        "facility_reg_no": "123705-5",
+        "facility_name": "Mbeya Zonal Referral Hospital",
+        "contacts": "+255 25 250 2247",
+        "ward_id": 5
+    },
+    {
+        "facility_reg_no": "123705-6",
+        "facility_name": "Tumaini Hospital",
+        "contacts": "+255 27 275 5107",
+        "ward_id": 6
+    },
+    {
+        "facility_reg_no": "123705-7",
+        "facility_name": "St. Francis Designated District Hospital",
+        "contacts": "+255 28 222 1657",
+        "ward_id": 7
+    },
+    {
+        "facility_reg_no": "123705-8",
+        "facility_name": "Mwananyamala Hospital",
+        "contacts": "+255 22 218 4902",
+        "ward_id": 8
+    },
+    {
+        "facility_reg_no": "123705-9",
+        "facility_name": "Amana Hospital",
+        "contacts": "+255 22 218 4052",
+        "ward_id": 9
+    },
+    {
+        "facility_reg_no": "123705-10",
+        "facility_name": "Mwanyamala Hospital",
+        "contacts": "+255 22 218 2831",
+        "ward_id": 10
+    },
+    {
+        "facility_reg_no": "123705-11",
+        "facility_name": "Hindu Mandal Hospital",
+        "contacts": "+255 27 264 4701",
+        "ward_id": 11
+    },
+    {
+        "facility_reg_no": "123705-12",
+        "facility_name": "Morogoro Regional Referral Hospital",
+        "contacts": "+255 23 261 4643",
+        "ward_id": 12
+    },
+    {
+        "facility_reg_no": "123705-13",
+        "facility_name": "Muhimbili Orthopedic Institute",
+        "contacts": "+255 22 215 2191",
+        "ward_id": 13
+    },
+    {
+        "facility_reg_no": "123705-14",
+        "facility_name": "Muhimbili Maternity Hospital",
+        "contacts": "+255 22 215 3746",
+        "ward_id": 14
+    },
+    {
+        "facility_reg_no": "123705-15",
+        "facility_name": "Mirembe Hospital",
+        "contacts": "+255 23 264 0032",
+        "ward_id": 15
+    },
+    {
+        "facility_reg_no": "123705-16",
+        "facility_name": "Muheza Designated District Hospital",
+        "contacts": "+255 27 264 1014",
+        "ward_id": 16
+    },
+    {
+        "facility_reg_no": "123705-17",
+        "facility_name": "Korogwe Designated District Hospital",
+        "contacts": "+255 27 264 1022",
+        "ward_id": 17
+    },
+    {
+        "facility_reg_no": "123705-18",
+        "facility_name": "Njombe Regional Referral Hospital",
+        "contacts": "+255 26 298 2060",
+        "ward_id": 18
+    },
+    {
+        "facility_reg_no": "123705-19",
+        "facility_name": "Mount Meru Regional Hospital",
+        "contacts": "+255 27 250 2776",
+        "ward_id": 19
+    },
+    {
+        "facility_reg_no": "123705-20",
+        "facility_name": "Haydom Lutheran Hospital",
+        "contacts": "+255 27 264 3030",
+        "ward_id": 20
+    },
+    {
+        "facility_reg_no": "123705-21",
+        "facility_name": "Lugalo Military Hospital",
+        "contacts": "+255 22 276 3001",
+        "ward_id": 21
+    },
+    {
+        "facility_reg_no": "123705-22",
+        "facility_name": "Hindu Mandal Hospital",
+        "contacts": "+255 27 264 4701",
+        "ward_id": 22
+    },
+    {
+        "facility_reg_no": "123705-23",
+        "facility_name": "Manyara Regional Hospital",
+        "contacts": "+255 27 275 5265",
+        "ward_id": 23
+    },
+    {
+        "facility_reg_no": "123705-24",
+        "facility_name": "Ndolage Hospital",
+        "contacts": "+255 27 254 0527",
+        "ward_id": 24
+    },
+    {
+        "facility_reg_no": "123705-25",
+        "facility_name": "Nkinga Hospital",
+        "contacts": "+255 25 259 2007",
+        "ward_id": 25
+    },
+    {
+        "facility_reg_no": "123705-26",
+        "facility_name": "Dareda Mission Hospital",
+        "contacts": "+255 27 275 6206",
+        "ward_id": 26
+    },
+    {
+        "facility_reg_no": "123705-27",
+        "facility_name": "Karatu Lutheran Hospital",
+        "contacts": "+255 27 275 5354",
+        "ward_id": 27
+    },
+    {
+        "facility_reg_no": "123705-28",
+        "facility_name": "KCMC Moshi",
+        "contacts": "+255 27 275 4377",
+        "ward_id": 28
+    },
+    {
+        "facility_reg_no": "123705-29",
+        "facility_name": "Makongoro Health Centre",
+        "contacts": "+255 22 266 6685",
+        "ward_id": 29
+    },
+    {
+        "facility_reg_no": "123705-30",
+        "facility_name": "Buguruni Hospital",
+        "contacts": "+255 22 215 0010",
+        "ward_id": 30
+
+
+    },
+    {
+        "facility_reg_no": "123705-31",
+        "facility_name": "Sinza Hospital",
+        "contacts": "+255 22 215 0182",
+        "ward_id": 31
+    },
+    {
+        "facility_reg_no": "123705-32",
+        "facility_name": "Mloganzila Hospital",
+        "contacts": "+255 22 241 0700",
+        "ward_id": 32
+    },
+    {
+        "facility_reg_no": "123705-33",
+        "facility_name": "Kisutu Municipal Hospital",
+        "contacts": "+255 22 211 7446",
+        "ward_id": 33
+    },
+    {
+        "facility_reg_no": "123705-34",
+        "facility_name": "Kibong'oto Infectious Diseases Hospital",
+        "contacts": "+255 27 275 2126",
+        "ward_id": 34
+    },
+    {
+        "facility_reg_no": "123705-35",
+        "facility_name": "Kibong'oto Infectious Diseases Hospital",
+        "contacts": "+255 27 275 2126",
+        "ward_id": 35
+    },
+    {
+        "facility_reg_no": "123705-36",
+        "facility_name": "Haydom Lutheran Hospital",
+        "contacts": "+255 27 264 3030",
+        "ward_id": 36
+    },
+    {
+        "facility_reg_no": "123705-37",
+        "facility_name": "Arusha Lutheran Medical Centre",
+        "contacts": "+255 27 254 2541",
+        "ward_id": 37
+    },
+    {
+        "facility_reg_no": "123705-38",
+        "facility_name": "Singida Regional Hospital",
+        "contacts": "+255 26 290 2113",
+        "ward_id": 38
+    },
+    {
+        "facility_reg_no": "123705-39",
+        "facility_name": "Zanzibar General Hospital",
+        "contacts": "+255 24 223 3481",
+        "ward_id": 39
+    },
+    {
+        "facility_reg_no": "123705-40",
+        "facility_name": "Muhimbili National Hospital",
+        "contacts": "+255 22 215 0000",
+        "ward_id": 40
+    },
+    {
+        "facility_reg_no": "123705-41",
+        "facility_name": "Bugando Medical Centre",
+        "contacts": "+255 28 250 0881",
+        "ward_id": 41
+    },
+    {
+        "facility_reg_no": "123705-42",
+        "facility_name": "Kilimanjaro Christian Medical Centre",
+        "contacts": "+255 27 275 4377",
+        "ward_id": 42
+    },
+    {
+        "facility_reg_no": "123705-43",
+        "facility_name": "Aga Khan Hospital",
+        "contacts": "+255 22 211 5151",
+        "ward_id": 43
+    },
+    {
+        "facility_reg_no": "123705-44",
+        "facility_name": "Mbeya Zonal Referral Hospital",
+        "contacts": "+255 25 250 2247",
+        "ward_id": 44
+    },
+    {
+        "facility_reg_no": "123705-45",
+        "facility_name": "Tumaini Hospital",
+        "contacts": "+255 27 275 5107",
+        "ward_id": 45
+    },
+    {
+        "facility_reg_no": "123705-46",
+        "facility_name": "St. Francis Designated District Hospital",
+        "contacts": "+255 28 222 1657",
+        "ward_id": 46
+    },
+    {
+        "facility_reg_no": "123705-47",
+        "facility_name": "Mwananyamala Hospital",
+        "contacts": "+255 22 218 4902",
+        "ward_id": 47
+    },
+    {
+        "facility_reg_no": "123705-48",
+        "facility_name": "Amana Hospital",
+        "contacts": "+255 22 218 4052",
+        "ward_id": 48
+    },
+    {
+        "facility_reg_no": "123705-49",
+        "facility_name": "Mwanyamala Hospital",
+        "contacts": "+255 22 218 2831",
+        "ward_id": 49
+    },
+    {
+        "facility_reg_no": "123705-50",
+        "facility_name": "Hindu Mandal Hospital",
+        "contacts": "+255 27 264 4701",
+        "ward_id": 50
+    },
+    {
+        "facility_reg_no": "123705-51",
+        "facility_name": "Morogoro Regional Referral Hospital",
+        "contacts": "+255 23 261 4643",
+        "ward_id": 51
+    },
+    {
+        "facility_reg_no": "123705-52",
+        "facility_name": "Muhimbili Orthopedic Institute",
+        "contacts": "+255 22 215 2191",
+        "ward_id": 52
+    },
+    {
+        "facility_reg_no": "123705-53",
+        "facility_name": "Muhimbili Maternity Hospital",
+        "contacts": "+255 22 215 3746",
+        "ward_id": 53
+    },
+    {
+        "facility_reg_no": "123705-54",
+        "facility_name": "Mirembe Hospital",
+        "contacts": "+255 23 264 0032",
+        "ward_id": 54
+    },
+    {
+        "facility_reg_no": "123705-55",
+        "facility_name": "Muheza Designated District Hospital",
+        "contacts": "+255 27 264 1014",
+        "ward_id": 55
+    },
+    {
+        "facility_reg_no": "123705-56",
+        "facility_name": "Korogwe Designated District Hospital",
+        "contacts": "+255 27 264 1022",
+        "ward_id": 56
+    },
+    {
+        "facility_reg_no": "123705-57",
+        "facility_name": "Njombe Regional Referral Hospital",
+        "contacts": "+255 26 298 2060",
+        "ward_id": 57
+    },
+    {
+        "facility_reg_no": "123705-58",
+        "facility_name": "Mount Meru Regional Hospital",
+        "contacts": "+255 27 250 2776",
+        "ward_id": 58
+    },
+    {
+        "facility_reg_no": "123705-59",
+        "facility_name": "Haydom Lutheran Hospital",
+        "contacts": "+255 27 264 3030",
+        "ward_id": 59
+    },
+    {
+        "facility_reg_no": "123705-60",
+        "facility_name": "Lugalo Military Hospital",
+        "contacts": "+255 22 276 3001",
+        "ward_id": 60
+    },
+    {
+        "facility_reg_no": "123705-61",
+        "facility_name": "Hindu Mandal Hospital",
+        "contacts": "+255 27 264 4701",
+        "ward_id": 61
+    },
+    {
+        "facility_reg_no": "123705-62",
+        "facility_name": "Manyara Regional Hospital",
+        "contacts": "+255 27 275 5265",
+        "ward_id": 62
+    },
+    {
+        "facility_reg_no": "123705-63",
+        "facility_name": "Ndolage Hospital",
+        "contacts": "+255 27 254 0527",
+        "ward_id": 63
+    },
+    {
+        "facility_reg_no": "123705-64",
+        "facility_name": "Nkinga Hospital",
+        "contacts": "+255 25 259 2007",
+        "ward_id": 64
+    },
+    {
+        "facility_reg_no": "123705-65",
+        "facility_name": "Dareda Mission Hospital",
+        "contacts": "+255 27 275 6206",
+        "ward_id": 65
+    },
+    {
+        "facility_reg_no": "123705-66",
+        "facility_name": "Karatu Lutheran Hospital",
+        "contacts": "+255 27 275 5354",
+        "ward_id": 66
+    },
+    {
+        "facility_reg_no": "123705-67",
+        "facility_name": "KCMC Moshi",
+        "contacts": "+255 27 275 4377",
+        "ward_id": 67
+    },
+    {
+        "facility_reg_no": "123705-68",
+        "facility_name": "Makongoro Health Centre",
+        "contacts": "+255 22 266 6685",
+        "ward_id": 68
+    },
+    {
+        "facility_reg_no": "123705-69",
+        "facility_name": "Buguruni Hospital",
+        "contacts": "+255 22 215 0010",
+        "ward_id": 69
+    },
+    {
+        "facility_reg_no": "123705-70",
+        "facility_name": "Sinza Hospital",
+        "contacts": "+255 22 215 0182",
+        "ward_id": 70
+    }
+    
+]
+
+

@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\NotificationController;
@@ -9,11 +10,11 @@ use App\Http\Controllers\WardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ChildController;
+use App\Http\Controllers\SMSController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\VaccinationSchedules;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Route;
 
 Route::post('createVaccine', [VaccinationController::class, 'createVaccine']);
@@ -76,6 +77,13 @@ Route::get('facility/{id}', [FacilityController::class,'show']);
 Route::put('facility/{id}', [FacilityController::class,'update']);
 Route::delete('facility/{id}', [FacilityController::class,'destroy']);
 
+
+// send sms 
+Route::get('send_sms',[SMSController::class,'sendSms']);
+
+
+// booking endpoints
+Route::post('add_booking',[BookingController::class,'store']);
 
 Route::post('/login', [AuthController::class, 'login']);
 

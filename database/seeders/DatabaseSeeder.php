@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\District;
+use App\Models\Facility;
 use App\Models\Region;
 use App\Models\Role;
 use App\Models\User;
@@ -19,6 +20,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
+        $facilities = file_get_contents(database_path('json/facilities.json'));
+        $data_facilities = json_decode($facilities, true);
+
 
         $json_region = file_get_contents(database_path('json/region.json'));
         $data_region = json_decode($json_region, true);
@@ -29,8 +33,10 @@ class DatabaseSeeder extends Seeder
         $json_ward = file_get_contents(database_path('json/ward.json'));
         $data_ward = json_decode($json_ward, true);
 
+
         $json_roles = file_get_contents(database_path('json/roles.json'));
         $roles = json_decode($json_roles, true);
+
 
         foreach ($data_region["features"] as $region) {
 
@@ -56,9 +62,23 @@ class DatabaseSeeder extends Seeder
             }
         }
 
+
+         foreach ($data_facilities as $facility) {
+
+            Facility::create(["facility_reg_no"=>$facility["facility_reg_no"],"facility_name"=>$facility["facility_name"],"contacts"=>$facility["contacts"],"ward_id"=>$facility["ward_id"] ]);
+        }
+
+
+        Role::create([
+            "role_id"=>"1000-1",
+            'role'=>'IT_ADMIN',
+            'account_type'=>'ministry'
+        ]);
+
         foreach ($roles["roles"] as $role) {
             Role::create(["role" => $role["name"], "account_type" => $role["account_type"]]);
         }
+
         User::factory()->create([
             'uid' => "1000-1-1",
             "role_id" => 1,
