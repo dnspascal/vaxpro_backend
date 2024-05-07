@@ -26,7 +26,19 @@ class AuthController extends Controller
             } else {
                 return response()->json(['message' => 'This account exists ward', 'status' => 409]);
             }
-        } else if ($request->has("district_id")) {
+        } 
+        else if ($request->has("facility_id")) {
+            if (User::where('role_id', $request->input('role_id'))
+                ->Where('facility_id', $request->input('facility_id'))
+                ->doesntExist()
+            ) {
+                $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, $request->district_id, null);
+            } else {
+                return response()->json(["message" => "This account exists district", 'status' => 409]);
+            }
+        } 
+        
+        else if ($request->has("district_id")) {
             if (User::where('role_id', $request->input('role_id'))
                 ->Where('district_id', $request->input('district_id'))
                 ->doesntExist()

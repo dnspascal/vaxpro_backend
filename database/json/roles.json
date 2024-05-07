@@ -9,9 +9,8 @@
         {"name" :"IT admin", "account_type":"district"},
         {"name" :"District Medical Officer", "account_type":"district"},
         {"name" :"District Vaccination Officer", "account_type":"district"},
-        {"name" :"IT Branch admin", "account_type":"facility"},
-        {"name" :"Nurse", "account_type":"facility"},
-        {"name" :"IT admin", "account_type":"ministry"},
+        {"name" :"IT Branch admin", "account_type":"branch_manager"},
+        {"name" :"Nurse", "account_type":"health_worker"},
         {"name" :"Community Health Worker", "account_type":"community_health_worker"},
         {"name" :"Parent", "account_type":"parent"}
 
