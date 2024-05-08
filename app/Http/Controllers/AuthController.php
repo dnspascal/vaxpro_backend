@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HealthWorker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -32,8 +33,13 @@ class AuthController extends Controller
                 ->Where('facility_id', $request->input('facility_id'))
                 ->doesntExist()
             ) {
-                $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, $request->district_id, null);
-            } else {
+                $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, 1, null);
+            }
+            if ($request->account_type == "health_worker"
+            ) {
+                $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, 2, null);
+            }
+            else {
                 return response()->json(["message" => "This account exists district", 'status' => 409]);
             }
         } 
@@ -81,6 +87,10 @@ class AuthController extends Controller
                 'facility_id' => $request->facility_id,
                 'contacts' => $request->contacts,
             ]);
+
+            if($request->account_type == "health_worker"){
+                HealthWorker::create(['staff_id'=>$request->staff_id,'first_name'=>$request->first_name,'surname_name'=>$request->surname_name,'user_id'=>$user->id]);
+            }
         }
         if ($user) {
 
