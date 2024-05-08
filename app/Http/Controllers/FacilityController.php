@@ -10,15 +10,15 @@ class FacilityController extends Controller
    
        public function create(Request $request)
     {
-        //
-        // $validated = $request->validate(['facility_reg_no'=>'required','facility_name'=>'required','ward_id'=>'required','contacts'=>'required']);
+       
         $facility =  Facility::where('facility_reg_no',$request->facility_reg_no)->first();
         if ($facility) {
             return response()->json(["message"=>"Hospital facility already exists",$facility],400);
         }
-        Facility::create($request->only(['facility_reg_no','facility_name','ward_id','contacts']));
+        
+        $facilityRes = Facility::create($request->only(['facility_reg_no','facility_name','ward_id','contacts']));
 
-        return response()->json(['message'=> 'hospital facility added successfully'],201);
+        return response()->json(['message'=> 'hospital facility added successfully','facility'=>$facilityRes],201);
     }
 
     public function showAll()

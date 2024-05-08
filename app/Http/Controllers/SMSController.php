@@ -2,30 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Twilio\Rest\Client; // make sure to import the Twilio client
+use App\Services\SmsService;
+
 
 class SMSController extends Controller
 {
+    protected $smsService;
+    public function __construct(SmsService $smsService)
+    {
+        $this->smsService = $smsService;
+    }
     public function sendSms()
     {
-        $receiverNumber = '+255745884099'; // Replace with the recipient's phone number
-        $message = 'Hello welcome to VaxPro everything is working as required'; // Replace with your desired message
-
-        $sid = env('TWILIO_SID');
-        $token = env('TWILIO_TOKEN');
-        $fromNumber = env('TWILIO_FROM');
+        $postData = [
+            'source_addr' => 'INFO',
+            'encoding' => 0,
+            'schedule_time' => '',
+            'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-"'."password"." na uid ",
+            'recipients' => [
+                ['recipient_id' => '1', 'dest_addr' => '255745884099'],
+                ['recipient_id' => '2', 'dest_addr' => '255658004980']
+            ]
+        ];
 
         try {
-            $client = new Client($sid, $token);
-            $client->messages->create($receiverNumber, [
-                'from' => $fromNumber,
-                'body' => $message
-            ]);
+            
+            $this->smsService->send__multiple_recipient();
 
-            return 'SMS Sent Successfully.';
+         return response()->json(["message sent successfully"]);
         } catch (\Exception $e) {
-            return 'Error: ' . $e->getMessage();
+            // Handle exception
+            return ['error' => $e->getMessage()];
         }
+        
     }
 }

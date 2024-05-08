@@ -87,7 +87,7 @@ Route::delete('facility/{id}', [FacilityController::class,'destroy']);
 
 
 // send sms 
-Route::get('send_sms',[SMSController::class,'sendSms']);
+Route::post('send_sms',[SMSController::class,'sendSms']);
 
 
 // booking endpoints
