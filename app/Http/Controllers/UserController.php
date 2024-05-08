@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HealthWorker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -29,6 +30,12 @@ class UserController extends Controller
 
             if (!is_null($user->facility_id)) {
                 $user['facility'] = Auth::user()->facilities;
+                return response()->json([$user]);
+            }
+
+            if (!is_null($user->health_workers)) {
+                $health_worker = HealthWorker::where('user_id',$user->id);
+                $user['health_worker'] = $health_worker;
                 return response()->json([$user]);
             }
 
