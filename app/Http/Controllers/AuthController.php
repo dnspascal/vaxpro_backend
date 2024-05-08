@@ -10,9 +10,18 @@ use App\Models\User;
 use App\Models\Role;
 use App\Helpers\GenerateRoleIdHelper;
 use App\Helpers\GeneratePasswordHelper;
+use App\Services\SmsService;
 
 class AuthController extends Controller
 {
+
+    protected $smsService;
+
+    public function __construct(SmsService $smsService)
+    {
+        $this->smsService = $smsService;
+    }
+
     public function register(Request $request)
     {
 
@@ -94,6 +103,19 @@ class AuthController extends Controller
         }
         if ($user) {
 
+            $postData = [
+                'source_addr' => 'VaxPro',
+                'encoding' => 0,
+                'schedule_time' => '',
+                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-"'.$password." na uid ".$user["uid"],
+                'recipients' => [
+                    ['recipient_id' => '1', 'dest_addr' => '255745884099'],
+                    ['recipient_id' => '2', 'dest_addr' => '255658004980']
+                ]
+            ];
+    
+            // Send SMS using the service
+            // $this->smsService->sendSms($postData);
             return response()->json(['message' => "User successfully added", $password, "status" => 200]);
         } else {
             return response()->json(["message" => "Error occured, Please try again", "status" => 401]);
