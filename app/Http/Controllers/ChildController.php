@@ -37,8 +37,8 @@ class ChildController extends Controller
                 'house_no' => $request->house_no,
                 'ward_id' => $ward_id,
                 'address_name' => 1, //to be omitted
-                'facility_id' => 'T2408-054-393',
-                'modified_by' => '2021-04-06692'
+                'facility_id' => $request->facility_id,
+                'modified_by' => $request->modified_by
             ]);
 
 

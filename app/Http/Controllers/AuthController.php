@@ -45,7 +45,11 @@ class AuthController extends Controller
             ) {
                 $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, 1, null);
             }
-            if ($request->account_type == "health_worker"
+            else if ($request->account_type == "health_worker"
+            ) {
+                $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, 2, null);
+            }
+            else if ($request->account_type == "branch_admin"
             ) {
                 $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, 2, null);
             }
