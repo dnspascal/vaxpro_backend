@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Role;
@@ -109,5 +110,12 @@ class AuthController extends Controller
                 "message" => "user not found",
                 "status" => 404,
             ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->where('id', $request->user()->currentAccessToken()->id)->delete();
+        return response()->json('Logged out successfully', 200);
+
     }
 }

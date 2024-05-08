@@ -36,11 +36,13 @@ Route::middleware('auth:sanctum')->group(function () {
     //auth endpoints
     Route::post('/register', [AuthController::class,'register']);
     Route::patch('update_user/{id}', [AuthController::class,'update']);
+    Route::post('/logout', [AuthController::class,'logout']);
 
     //user endpoints
     Route::get('/user', [UserController::class, 'userData']);
     Route::delete('/user/{id}', [UserController::class,'destroy']);
     Route::get('/all_users/{id}', [UserController::class,'allUsers']);
+
 
     //address endpoints
     Route::get('/regions', [RegionController::class,'showAll']);
