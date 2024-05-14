@@ -17,7 +17,9 @@ use App\Models\Role;
 class ChildController extends Controller
 {
     public function parentChildData(Request $request)
-    {
+    {  
+        $request->all();
+        
         $ward_id = explode('-', $request->ward_id);
         $ward_id = end($ward_id);
         $ward_id = (int) $ward_id;
@@ -36,41 +38,42 @@ class ChildController extends Controller
                 'date_of_birth' => $request->birth_date,
                 'house_no' => $request->house_no,
                 'ward_id' => $ward_id,
-                'address_name' => 1, //to be omitted
-                'facility_id' => 'T2408-054-393',
+                'address_name' => 2,
+                'facility_id' => '123705-21',
                 'modified_by' => '2021-04-06692'
             ]);
 
 
             $password = GeneratePasswordHelper::generatePassword();
 
-            $user_role = Role::where('account_type', 'parent')->value('role_id');
+            $user_role = Role::where('account_type', 'parent')->value('id');
 
             $user = User::create([
                 'role_id' => $user_role,
+                'uid' =>  GenerateRoleIdHelper::generateRoleId("parent", null, null ,$ward_id),
                 'contacts' => $request->contact,
                 'password' => Hash::make($password)
             ]);
 
             $parent = ParentsGuardians::create([
-                'nida_id' => $request->nida_id,
                 'firstname' => $request->par_first_name,
                 'middlename' => $request->par_middle_name,
                 'lastname' => $request->par_last_name,
-                'user_id' => $user->id
+                'user_id' => $user->id,
+                'nida_id' => $request->nida_id,
+
 
             ]);
 
-            ParentsGuardiansChild::create([
-                'parents_guardians_id' => $parent->nida_id,
-                'child_id' => $child->card_no,
-                'relationship_with_child' => $request->relation,
-            ]);
+
+            $parent->child()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
 
             return response()->json([
                 'message' => 'Data saved successfully!',
                 'status' => 200,
+                'cardNo' => $child->card_no
             ]);
+
         } elseif (!$childExists && $parentExists) {
             $child = Child::create([
                 'card_no' => $request->card_no,
@@ -81,7 +84,7 @@ class ChildController extends Controller
                 'house_no' => $request->house_no,
                 'ward_id' => $ward_id,
                 'address_name' => 1, //to be omitted
-                'facility_id' => 'T2408-054-393',
+                'facility_id' => '123705-21',
                 'modified_by' => '2021-04-06692'
             ]);
 
