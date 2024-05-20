@@ -14,10 +14,14 @@ class Booking extends Model
         'vaccine_list' => 'array',
     ];
 
+    public static function find(string $id)
+    {
+    }
+
     public function children(){
         return $this->belongsTo(Child::class,'child_id','card_no');
     }
-    
+
 
     public function facilities(){
         return $this->belongsTo(Facility::class);

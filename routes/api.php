@@ -55,8 +55,11 @@ Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
 
     //roles endpoints
     Route::get("/roles", [RoleController::class, "index"]);
+
+    //booking endpoints
 });
 
+Route::get('hospital_bookings/{id}',[BookingController::class,'show']);
 
 
 // regions endpoints
@@ -90,7 +93,7 @@ Route::put('facility/{id}', [FacilityController::class, 'update']);
 Route::delete('facility/{id}', [FacilityController::class, 'destroy']);
 
 
-// send sms 
+// send sms
 Route::post('send_sms', [SMSController::class, 'sendSms']);
 
 

@@ -35,37 +35,33 @@ class AuthController extends Controller
                 $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, null, $request->ward_id);
             } else if (Role::where('id', $request->role_id)) {
             } else {
-                return response()->json(['message' => 'This account exists ward', 'status' => 409]);
+                return response()->json(['message' => 'This account exists ', 'status' => 409]);
             }
-        } 
-        else if ($request->has("facility_id")) {
+        } else if ($request->has("facility_id")) {
             if (User::where('role_id', $request->input('role_id'))
                 ->Where('facility_id', $request->input('facility_id'))
                 ->doesntExist()
             ) {
                 $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, 1, null);
-            }
-            else if ($request->account_type == "health_worker"
+            } else if (
+                $request->account_type == "health_worker"
             ) {
                 $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, 2, null);
-            }
-            else if ($request->account_type == "branch_admin"
+            } else if (
+                $request->account_type == "branch_admin"
             ) {
                 $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, 2, null);
+            } else {
+                return response()->json(["message" => "This account exists ", 'status' => 409]);
             }
-            else {
-                return response()->json(["message" => "This account exists district", 'status' => 409]);
-            }
-        } 
-        
-        else if ($request->has("district_id")) {
+        } else if ($request->has("district_id")) {
             if (User::where('role_id', $request->input('role_id'))
                 ->Where('district_id', $request->input('district_id'))
                 ->doesntExist()
             ) {
                 $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, $request->district_id, null);
             } else {
-                return response()->json(["message" => "This account exists district", 'status' => 409]);
+                return response()->json(["message" => "This district account exists ", 'status' => 409]);
             }
         } else if ($request->has("region_id")) {
             if (User::where('role_id', $request->input('role_id'))
@@ -74,7 +70,7 @@ class AuthController extends Controller
             ) {
                 $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, $request->region_id, null, null);
             } else {
-                return response()->json(["message" => "This account exists region", 'status' => 409]);
+                return response()->json(["message" => "This region account exists", 'status' => 409]);
             }
         } else {
             if (User::where('role_id', $request->input('role_id'))
@@ -82,7 +78,7 @@ class AuthController extends Controller
             ) {
                 $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, null, null);
             } else {
-                return response()->json(['message' => 'This account exists ministry', 'status' => 409]);
+                return response()->json(['message' => 'This ministry account exists ', 'status' => 409]);
             }
         };
 
@@ -102,9 +98,18 @@ class AuthController extends Controller
                 'contacts' => $request->contacts,
             ]);
 
-            if($request->account_type == "health_worker"){
-                HealthWorker::create(['staff_id'=>$request->staff_id,'first_name'=>$request->first_name,'surname_name'=>$request->surname_name,'user_id'=>$user->id]);
-            }
+            if ($request->account_type == "health_worker") {
+
+              if($request->has("last_name")) {
+               HealthWorker::create([
+                    'staff_id' => $request->staff_id,
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                     'user_id' => $user->id
+                ]);
+              } else {
+                 return $request . "REQUEST WITH NO LAST NAME";
+            }}
         }
         if ($user) {
 
@@ -112,13 +117,13 @@ class AuthController extends Controller
                 'source_addr' => 'VaxPro',
                 'encoding' => 0,
                 'schedule_time' => '',
-                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-"'.$password." na uid ".$user["uid"],
+                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-"' . $password . " na uid " . $user["uid"],
                 'recipients' => [
                     ['recipient_id' => '1', 'dest_addr' => '255745884099'],
                     ['recipient_id' => '2', 'dest_addr' => '255658004980']
                 ]
             ];
-    
+
             // Send SMS using the service
             // $this->smsService->sendSms($postData);
             return response()->json(['message' => "User successfully added", $password, "status" => 200]);
@@ -164,6 +169,5 @@ class AuthController extends Controller
     {
         $request->user()->tokens()->where('id', $request->user()->currentAccessToken()->id)->delete();
         return response()->json('Logged out successfully', 200);
-
     }
 }

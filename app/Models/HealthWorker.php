@@ -9,7 +9,7 @@ class HealthWorker extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['staff_id','first_name','surname_name','user_id'];
+    protected $fillable = ['staff_id','first_name','last_name','user_id'];
 
     public function child_vaccination_schedules(){
         return $this->hasMany(ChildVaccinationSchedule::class);
