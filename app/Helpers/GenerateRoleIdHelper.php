@@ -22,9 +22,9 @@ class GenerateRoleIdHelper
 
                             ? User::where('uid', 'LIKE', "5000-{$ward_id}%")->pluck('uid')->toArray()
                             : (($account_type === "community_health_worker")
-                                ? User::where("uid", "LIKE", "6000-{$ward_id}")->pluck('uid')->toArray()
+                                ? User::where("uid", "LIKE", "6000-{$ward_id}%")->pluck('uid')->toArray()
                                 : (($account_type === "parent")
-                                    ? User::where("uid", "LIKE", "7000-{$ward_id}")->pluck("uid")->toArray()
+                                    ? User::where("uid", "LIKE", "7000-{$ward_id}%")->pluck("uid")->toArray()
                                     :
                                     [])))
 
@@ -37,6 +37,7 @@ class GenerateRoleIdHelper
             $suffixes[] = (int) explode('-', $uid)[2];
         }
         $maxSuffix = $suffixes ? max($suffixes) + 1 : 1;
+        
 
         ($account_type === "ministry") ?  $uid = '1000-' . "1" . "-" . $maxSuffix
             : (($account_type === "regional") ? $uid = '2000-' . $region_id . "-" . $maxSuffix

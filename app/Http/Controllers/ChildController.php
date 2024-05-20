@@ -41,7 +41,7 @@ class ChildController extends Controller
                 'house_no' => $request->house_no,
                 'ward_id' => $ward_id,
                 'facility_id' => $request->facility_id,
-                'modified_by' => $request->staff_id
+                'modified_by' => $request->modified_by
 
             ]);
 
@@ -71,12 +71,12 @@ class ChildController extends Controller
             $parent->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
 
             return response()->json([
-                'message' => 'Data saved successfully!',
-                'status' => 200,
+                'message' => 'Parent added successfully!',
+                'password' => $password,
                 'cardNo' => $child->card_no
-            ]);
+            ],200);
 
-        } elseif (!$childExists && $parentExists) {
+        } else if (!$childExists && $parentExists) {
             $child = Child::create([
                 'card_no' => $request->card_no,
                 'firstname' => $request->first_name,
@@ -104,7 +104,7 @@ class ChildController extends Controller
         return response()->json([
             'message' => 'Child not added!',
             'status' => 400,
-        ]);
+        ],400);
     }
 
     public function children(Request $request)

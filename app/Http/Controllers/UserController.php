@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\HealthWorker;
+use App\Models\ParentsGuardians;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -16,6 +17,7 @@ class UserController extends Controller
             $user = Auth::user();
             $user = array();
             $user = Auth::user();
+            $parent = ParentsGuardians::where('user_id',$user->id)->first();
             $user['role'] = Auth::user()->role;
 
             if (!is_null($user->district_id)) {
@@ -33,10 +35,19 @@ class UserController extends Controller
                 return response()->json([$user]);
             }
 
-            if (!is_null($user->health_workers)) {
-                $health_worker = HealthWorker::where('user_id',$user->id);
+            
+
+            if (count($user->health_workers)!= 0) {
+                $health_worker = HealthWorker::where('user_id',$user->id)->first();
                 $user['health_worker'] = $health_worker;
-                return response()->json([$user]);
+                return response()->json($user,200);
+            }
+
+            if (!is_null($parent)) {
+                $child = $parent->children()->first();
+                $user['child'] = $child; 
+                
+                return response()->json($user,200);
             }
 
 

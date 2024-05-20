@@ -33,8 +33,11 @@ class AuthController extends Controller
                 ->doesntExist()
             ) {
                 $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, null, $request->ward_id);
-            } else if (Role::where('id', $request->role_id)) {
-            } else {
+            } 
+            // else if (Role::where('id', $request->role_id)) {
+            
+            // }
+             else {
                 return response()->json(['message' => 'This account exists ', 'status' => 409]);
             }
         } else if ($request->has("facility_id")) {
@@ -100,16 +103,17 @@ class AuthController extends Controller
 
             if ($request->account_type == "health_worker") {
 
-              if($request->has("last_name")) {
-               HealthWorker::create([
-                    'staff_id' => $request->staff_id,
-                    'first_name' => $request->first_name,
-                    'last_name' => $request->last_name,
-                     'user_id' => $user->id
-                ]);
-              } else {
-                 return $request . "REQUEST WITH NO LAST NAME";
-            }}
+                if ($request->has("last_name")) {
+                    HealthWorker::create([
+                        'staff_id' => $request->staff_id,
+                        'first_name' => $request->first_name,
+                        'last_name' => $request->last_name,
+                        'user_id' => $user->id
+                    ]);
+                } else {
+                    return $request . "REQUEST WITH NO LAST NAME";
+                }
+            }
         }
         if ($user) {
 
