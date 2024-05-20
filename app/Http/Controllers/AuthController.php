@@ -2,16 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HealthWorker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Role;
 use App\Helpers\GenerateRoleIdHelper;
 use App\Helpers\GeneratePasswordHelper;
+use App\Services\SmsService;
 
 class AuthController extends Controller
 {
+
+    protected $smsService;
+
+    public function __construct(SmsService $smsService)
+    {
+        $this->smsService = $smsService;
+    }
+
     public function register(Request $request)
     {
 
@@ -26,7 +37,28 @@ class AuthController extends Controller
             } else {
                 return response()->json(['message' => 'This account exists ward', 'status' => 409]);
             }
-        } else if ($request->has("district_id")) {
+        } 
+        else if ($request->has("facility_id")) {
+            if (User::where('role_id', $request->input('role_id'))
+                ->Where('facility_id', $request->input('facility_id'))
+                ->doesntExist()
+            ) {
+                $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, 1, null);
+            }
+            else if ($request->account_type == "health_worker"
+            ) {
+                $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, 2, null);
+            }
+            else if ($request->account_type == "branch_admin"
+            ) {
+                $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, 2, null);
+            }
+            else {
+                return response()->json(["message" => "This account exists district", 'status' => 409]);
+            }
+        } 
+        
+        else if ($request->has("district_id")) {
             if (User::where('role_id', $request->input('role_id'))
                 ->Where('district_id', $request->input('district_id'))
                 ->doesntExist()
@@ -69,9 +101,26 @@ class AuthController extends Controller
                 'facility_id' => $request->facility_id,
                 'contacts' => $request->contacts,
             ]);
+
+            if($request->account_type == "health_worker"){
+                HealthWorker::create(['staff_id'=>$request->staff_id,'first_name'=>$request->first_name,'surname_name'=>$request->surname_name,'user_id'=>$user->id]);
+            }
         }
         if ($user) {
 
+            $postData = [
+                'source_addr' => 'VaxPro',
+                'encoding' => 0,
+                'schedule_time' => '',
+                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-"'.$password." na uid ".$user["uid"],
+                'recipients' => [
+                    ['recipient_id' => '1', 'dest_addr' => '255745884099'],
+                    ['recipient_id' => '2', 'dest_addr' => '255658004980']
+                ]
+            ];
+    
+            // Send SMS using the service
+            // $this->smsService->sendSms($postData);
             return response()->json(['message' => "User successfully added", $password, "status" => 200]);
         } else {
             return response()->json(["message" => "Error occured, Please try again", "status" => 401]);
@@ -109,5 +158,12 @@ class AuthController extends Controller
                 "message" => "user not found",
                 "status" => 404,
             ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->where('id', $request->user()->currentAccessToken()->id)->delete();
+        return response()->json('Logged out successfully', 200);
+
     }
 }

@@ -40,8 +40,9 @@ class ChildController extends Controller
                 'date_of_birth' => $request->birth_date,
                 'house_no' => $request->house_no,
                 'ward_id' => $ward_id,
-                'facility_id' => '123705-21',
-                'modified_by' => '12345'
+                'facility_id' => $request->facility_id,
+                'modified_by' => $request->staff_id
+
             ]);
 
 

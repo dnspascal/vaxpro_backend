@@ -21,11 +21,10 @@ return new class extends Migration
             $table->unsignedBigInteger('ward_id');
             $table->string('house_no')->nullable();
             $table->date('date_of_birth');
-            $table->string('modified_by');
-            
+            $table->unsignedBigInteger('modified_by');     
             $table->foreign('facility_id')->references('facility_reg_no')->on('facilities')->onDelete('cascade');
             $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');
-            $table->foreign('modified_by')->references('staff_id')->on('health_workers')->onDelete('cascade');
+            $table->foreign('modified_by')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
         });

@@ -41,8 +41,8 @@ class GenerateRoleIdHelper
         ($account_type === "ministry") ?  $uid = '1000-' . "1" . "-" . $maxSuffix
             : (($account_type === "regional") ? $uid = '2000-' . $region_id . "-" . $maxSuffix
                 : (($account_type === 'district') ? $uid = '3000-' . $district_id . "-" . $maxSuffix
-                    : (($account_type === "branch_manager") ?  $uid = '4000-' . $ward_id . "-" . $maxSuffix
-                        : (($account_type === "health_worker") ? $uid = "5000-" . $ward_id . "-" . $maxSuffix
+                    : (($account_type === "branch_manager") ?  $uid = '4000-' ." 1 ". "-" . $maxSuffix
+                        : (($account_type === "health_worker") ? $uid = "5000-" . "2" . "-" . $maxSuffix
                             : (($account_type === "community_health_worker") ? $uid = "6000-" . $ward_id . "-" . $maxSuffix
                                 : (($account_type === "parent") ? $uid = "7000-" . $ward_id . "-" . $maxSuffix
                                     : null)
