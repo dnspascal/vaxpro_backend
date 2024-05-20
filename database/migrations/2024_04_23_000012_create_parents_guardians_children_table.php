@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('parents_guardians_children', function (Blueprint $table) {
             $table->id();
-            $table->string("parents_guardians_id");//relationship
-            $table->string("child_id");//child
+            $table->string("nida_id");//relationship with parent
+            $table->string("card_no");//child relationship
             $table->string("relationship_with_child"); 
-            $table->foreign('parents_guardians_id')->references('nida_id')->on('parents_guardians')->onDelete('cascade');
-            $table->foreign('child_id')->references('card_no')->on('children')->onDelete('cascade');
+            $table->foreign('nida_id')->references('nida_id')->on('parents_guardians')->onDelete('cascade');
+            $table->foreign('card_no')->references('card_no')->on('children')->onDelete('cascade');
             $table->timestamps();
         });
     }

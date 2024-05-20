@@ -92,7 +92,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class, "role_id");
     }
-    public function parentGuardian()
+    public function parents_guardians()
     {
         return $this->hasMany(ParentsGuardians::class);
     }

@@ -9,20 +9,30 @@ class Child extends Model
 {
     use HasFactory;
     protected $primaryKey = 'card_no';
-    protected $fillable = ['card_no', 'firstname', 'middlename', 'surname', 'parent_id', 'facility_id', 'ward_id', 'address_name', 'house_no', 'date_of_birth', 'modified_by'];
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
+    protected $fillable = ['card_no', 'firstname', 'middlename', 'surname',  'facility_id', 'ward_id',  'house_no', 'date_of_birth', 'modified_by'];
 
     public function bookings()
     {
         return $this->hasMany(Booking::class);
     }
-
+    
+    public function child_vaccination_schedules()
+    {
+        return $this->hasMany(ChildVaccinationSchedule::class);
+    }
+    
 
     public function vaccinations()
     {
         return $this->belongsToMany(Vaccination::class, 'child_vaccinations', 'child_id', 'vaccination_id');
     }
 
-    public function users()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
@@ -44,6 +54,7 @@ class Child extends Model
 
     public function parents_guardians()
     {
-        return $this->belongsToMany(ParentsGuardians::class, 'parents_guardians_children','child_id',  'parents_guardians_id');
+        return $this->belongsToMany(ParentsGuardians::class, 'parents_guardians_children','card_no','nida_id',)->withPivot('relationship_with_child');
+        
     }
 }
