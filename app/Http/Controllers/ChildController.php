@@ -30,6 +30,8 @@ class ChildController extends Controller
 
 
         if (!$childExists && !$parentExists) {
+            
+          
             $child = Child::create([
                 'card_no' => $request->card_no,
                 'firstname' => $request->first_name,
@@ -38,7 +40,6 @@ class ChildController extends Controller
                 'date_of_birth' => $request->birth_date,
                 'house_no' => $request->house_no,
                 'ward_id' => $ward_id,
-                'address_name' => 2,
                 'facility_id' => '123705-21',
                 'modified_by' => '12345'
             ]);
@@ -83,7 +84,6 @@ class ChildController extends Controller
                 'date_of_birth' => $request->birth_date,
                 'house_no' => $request->house_no,
                 'ward_id' => $ward_id,
-                'address_name' => 1, //to be omitted
                 'facility_id' => '123705-21',
                 'modified_by' => '12345'
             ]);
@@ -94,12 +94,16 @@ class ChildController extends Controller
             //     'relationship_with_child' => 'parent',
             // ]);
 
-            // $parent->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
+            //  $parent->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
             return response()->json([
                 'message' => 'Child added successfully!',
                 'status' => 200,
             ]);
         }
+        return response()->json([
+            'message' => 'Child not added!',
+            'status' => 400,
+        ]);
     }
 
     public function children(Request $request)

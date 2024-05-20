@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('surname');
             $table->string('facility_id');
             $table->unsignedBigInteger('ward_id');
-            $table->integer('address_name');
             $table->string('house_no')->nullable();
             $table->date('date_of_birth');
             $table->string('modified_by');

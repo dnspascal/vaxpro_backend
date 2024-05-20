@@ -14,7 +14,7 @@ class Child extends Model
 
     protected $keyType = 'string';
 
-    protected $fillable = ['card_no', 'firstname', 'middlename', 'surname',  'facility_id', 'ward_id', 'address_name', 'house_no', 'date_of_birth', 'modified_by'];
+    protected $fillable = ['card_no', 'firstname', 'middlename', 'surname',  'facility_id', 'ward_id',  'house_no', 'date_of_birth', 'modified_by'];
 
     public function bookings()
     {
@@ -54,7 +54,7 @@ class Child extends Model
 
     public function parents_guardians()
     {
-        return $this->belongsToMany(ParentsGuardians::class, 'parents_guardians_children','nida_id','card_no')->withPivot('relationship_with_child');
+        return $this->belongsToMany(ParentsGuardians::class, 'parents_guardians_children','card_no','nida_id',)->withPivot('relationship_with_child');
         
     }
 }
