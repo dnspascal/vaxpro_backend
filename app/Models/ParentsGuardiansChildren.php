@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class ParentsGuardiansChild extends Model
 {
     use HasFactory;
-    protected $fillable = ['parents_guardians_id','child_id','relationship_with_child'];
+    protected $fillable = ['nida_id','card_no','relationship_with_child'];
     
 }

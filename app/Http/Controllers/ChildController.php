@@ -40,7 +40,7 @@ class ChildController extends Controller
                 'ward_id' => $ward_id,
                 'address_name' => 2,
                 'facility_id' => '123705-21',
-                'modified_by' => '2021-04-06692'
+                'modified_by' => '12345'
             ]);
 
 
@@ -66,7 +66,7 @@ class ChildController extends Controller
             ]);
 
 
-            $parent->child()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
+            $parent->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
 
             return response()->json([
                 'message' => 'Data saved successfully!',
@@ -85,15 +85,16 @@ class ChildController extends Controller
                 'ward_id' => $ward_id,
                 'address_name' => 1, //to be omitted
                 'facility_id' => '123705-21',
-                'modified_by' => '2021-04-06692'
+                'modified_by' => '12345'
             ]);
 
-            ParentsGuardiansChild::create([
-                'parents_guardians_id' => $parentData->nida_id,
-                'child_id' => $child->card_no,
-                'relationship_with_child' => 'parent',
-            ]);
+            // ParentsGuardiansChild::create([
+            //     'parents_guardians_id' => $parentData->nida_id,
+            //     'child_id' => $child->card_no,
+            //     'relationship_with_child' => 'parent',
+            // ]);
 
+            // $parent->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
             return response()->json([
                 'message' => 'Child added successfully!',
                 'status' => 200,

@@ -24,9 +24,9 @@ class ParentsGuardians extends Model
     }
 
 
-    public function child()
+    public function children()
     {
-        return $this->belongsToMany(Child::class, 'parents_guardians_children', 'parents_guardians_id', 'child_id')->withPivot('relationship_with_child');
+        return $this->belongsToMany(Child::class, 'parents_guardians_children',  'card_no','nida_id')->withPivot('relationship_with_child');
 
     }
 }
