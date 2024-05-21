@@ -46,7 +46,7 @@ Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
     Route::get('/user', [UserController::class, 'userData']);
     Route::delete('/user/{id}', [UserController::class, 'destroy']);
     Route::get('/all_users/{id}', [UserController::class, 'allUsers']);
-
+    
 
     //address endpoints
     Route::get('/regions', [RegionController::class, 'showAll']);
@@ -101,3 +101,5 @@ Route::post('send_sms', [SMSController::class, 'sendSms']);
 Route::post('add_booking', [BookingController::class, 'store']);
 
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::post('/refresh', [AuthController::class, 'refreshToken']);

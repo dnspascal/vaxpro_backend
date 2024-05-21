@@ -155,7 +155,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
 
-            $token  = $request->user()->createToken("API value")->plainTextToken;
+            $token  = $request->user()->createToken("vaxPro")->plainTextToken;
 
             return response()->json([
                 "token" => $token,
@@ -168,6 +168,22 @@ class AuthController extends Controller
                 "status" => 404,
             ]);
     }
+
+
+    public function refreshToken(Request $request)
+{
+    $user = $request->user();
+
+    
+
+    // Revoke current token
+    $request->user()->currentAccessToken()->delete();
+
+    // Generate new token
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json($token,200);
+}
 
     public function logout(Request $request)
     {
