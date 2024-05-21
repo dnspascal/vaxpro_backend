@@ -68,10 +68,10 @@ class VaccinationSchedulesController extends Controller
     
             ChildVaccinationSchedule::create([
                 'child_vaccination_id' => $child_vaccination->id,
-                'health_worker_id' => '2021-04-06692',
+                'health_worker_id' => '12345',
                 'facility_id' => '123705-21',
                 'frequency' => $vac->frequency,
-                'child_id' =>'77778888',
+                'child_id' =>'12345622',
                 'vaccination_date' => '2024-05-08',
                 'next_vaccination_date' => $currentVaccineDates[0],
                 'status' => false,
