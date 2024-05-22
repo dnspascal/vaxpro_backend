@@ -28,10 +28,11 @@ Route::get('getChildParentData', [ChildController::class, 'getChildParentData'])
 Route::get('children', [ChildController::class, 'children']);
 Route::get('parents', [ParentController::class, 'parents']);
 Route::get('getChildData/{id}', [ChildController::class, 'getChildData']);
-Route::post('addNewChildVaccinnes', [VaccinationSchedulesController::class, 'vaccine']);
+Route::get('getAllChildSchedules', [VaccinationSchedulesController::class, 'vaccine']);
 Route::get('getVacSchedules/{id}', [VaccinationSchedulesController::class, 'getVacSchedules']);
 Route::post('updateChildVacSchedule', [VaccinationSchedulesController::class, 'updateChildVacSchedule']);
 Route::get('getChildVaccines', [VaccinationController::class, 'getVaccines']);
+Route::get('fetchVaccineIds', [VaccinationController::class, 'fetchVaccineIds']);
 
 
 

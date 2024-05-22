@@ -7,8 +7,9 @@ use Illuminate\Http\Request;
 
 class VaccinationController extends Controller
 {
-    public function createVaccine(Request $request){
-        
+    public function createVaccine(Request $request)
+    {
+
         $vaccine = Vaccination::create([
             'name' => $request->vaccine_name,
             'frequency' => $request->frequency,
@@ -26,10 +27,10 @@ class VaccinationController extends Controller
             'vaccine' => $vaccine,
             'status' => 200
         ]);
-
     }
 
-    public function getVaccines(){
+    public function getVaccines()
+    {
         $vaccines = Vaccination::all();
         return response()->json([
             'vaccines' => $vaccines,
@@ -37,26 +38,27 @@ class VaccinationController extends Controller
         ]);
     }
 
-    public function getVaccine($id){
+    public function getVaccine($id)
+    {
         $vaccine = Vaccination::where('id', $id)->first();
-        if($vaccine){
-            $vaccine->first_dose_after = (string) $vaccine->first_dose_after; 
+        if ($vaccine) {
+            $vaccine->first_dose_after = (string) $vaccine->first_dose_after;
             return response()->json([
                 'vaccine' => $vaccine,
                 'status' => 200
             ]);
-        }else{
+        } else {
             return response()->json([
                 'vaccine' => 'No Product Found!',
                 'status' => 400
             ]);
         }
-
     }
 
-    public function updateVaccine(Request $request, $id){
+    public function updateVaccine(Request $request, $id)
+    {
         $vaccine = Vaccination::find($id);
-        if($vaccine){
+        if ($vaccine) {
             $vaccine->name = $request->name;
             $vaccine->frequency = $request->frequency;
             $vaccine->vaccine_against = $request->vaccine_against;
@@ -70,25 +72,38 @@ class VaccinationController extends Controller
             $vaccine->save();
 
             return response()->json([
-                'status'=>200,
-                'message'=>'Vaccine Updated Successfully',
-                'vaccine'=> $vaccine
+                'status' => 200,
+                'message' => 'Vaccine Updated Successfully',
+                'vaccine' => $vaccine
             ]);
-            
-
-
         }
     }
 
-    public function deleteVaccine($id){
+    public function deleteVaccine($id)
+    {
         $vaccine = Vaccination::find($id);
-        if($vaccine){
+        if ($vaccine) {
             $vaccine->delete();
 
             return response()->json([
-                'status'=>200,
-                'message'=>'Vaccine Deleted Successfully',
+                'status' => 200,
+                'message' => 'Vaccine Deleted Successfully',
             ]);
         }
     }
+    public function fetchVaccineIds()
+    {
+        $vaccines = Vaccination::all();
+        $vaccine_id_array = array();
+        foreach ($vaccines as $vaccine) {
+
+            $vaccine_id_array[] =  $vaccine->id;
+        }
+        return response()->json([
+            'status' => 200,
+            'vaccineIds' => $vaccine_id_array,
+        ]);
+    }
+
+   
 }
