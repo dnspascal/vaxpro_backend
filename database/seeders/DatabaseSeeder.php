@@ -75,6 +75,7 @@ class DatabaseSeeder extends Seeder
             Role::create(["role" => $role["name"], "account_type" => $role["account_type"]]);
         }
 
+
         User::create([
             'uid' => "1000-1-1",
             "role_id" => 1,
