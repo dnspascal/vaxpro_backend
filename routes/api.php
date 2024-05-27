@@ -1,6 +1,4 @@
 <?php
-
-
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\FacilityController;
@@ -14,7 +12,7 @@ use App\Http\Controllers\SMSController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\VaccinationSchedulesController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\CertificatesController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('createVaccine', [VaccinationController::class, 'createVaccine']);
@@ -56,10 +54,14 @@ Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
     //roles endpoints
     Route::get("/roles", [RoleController::class, "index"]);
 
+    //certificates
+
     //booking endpoints
 });
+Route::post("/certificates", [CertificatesController::class,"store"]);
 
-Route::get('hospital_bookings/{id}',[BookingController::class,'show']);
+
+Route::get('hospital_bookings/{id}', [BookingController::class,'show']);
 
 
 // regions endpoints

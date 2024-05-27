@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('facilities', function (Blueprint $table) {
-            
+
             $table->string('facility_reg_no')->primary();//reg no
             $table->string('facility_name');
-            $table->string('contacts');
+            $table->string('contacts')->unique();
             $table->unsignedBigInteger('ward_id'); //foreign key for ward table
             $table->foreign('ward_id')->references('id')->on('wards');
             $table->timestamps();
