@@ -14,9 +14,9 @@ class UserFactory extends Factory
 
     public function definition()
     {
-        
+
         $ward = Ward::all()->random();
-       
+
 
         $uid = GenerateRoleIdHelper::generateRoleId("parent",  null, null, $ward->id);
 
@@ -25,7 +25,7 @@ class UserFactory extends Factory
             'role_id' => 10,
             'password' => Hash::make("12345"), // or use a hash function
             'ward_id' => $ward->id,
-            'contacts' => $this->faker->phoneNumber,
+            'contacts' => $this->faker->unique()->phoneNumber,
         ];
     }
 }
