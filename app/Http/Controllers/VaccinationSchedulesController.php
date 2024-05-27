@@ -17,17 +17,18 @@ class VaccinationSchedulesController extends Controller
 
         $vacccineData =  $request->vaccines;
 
-        foreach ($vacccineData as $key => $value) {
+        foreach ($vacccineData as $value) {
             $vaccineData = Vaccination::where('id', $value)->first();
             if ($vaccineData) {
                 $dataArray[] = $vaccineData;
             }
         }
 
-        foreach ($dataArray as $vaccineItem) {
+        $vaccinesNames = ["BCG","MR2"];
+        foreach ($dataArray as $key=>$vaccineItem) {
             $dates = array(); // Clear $dates array for each vaccine
 
-            $dates[] = Carbon::createFromFormat('Y-m-d', $request->date)
+            $dates[] =Carbon::createFromFormat('Y-m-d', $request->date)
                 ->addDays($vaccineItem->first_dose_after)
                 ->format('Y-m-d');
 
@@ -53,13 +54,27 @@ class VaccinationSchedulesController extends Controller
                     ->format('Y-m-d');
             }
 
-            $result = $dates;
+            $dosesDates = array();
+            $doses = ["first_dose","second_dose","third_dose","fourth_dose","fifth_dose"];
+            foreach($dates as $index=>$value){
+                $dosesDates[] = [$doses[$index] =>$value];
+            }
+
+            $result[$vaccineItem->name] = $dosesDates;
         }
-
-
+        
+        $dosesDates = array();
+        $doses = ["first_dose","second_dose","third_dose","fourth_dose","fifth_dose"];
+       foreach ($result as  $vaccinations) {
+        foreach($vaccinations as $index=>$value){
+            $dosesDates[] = [$doses[$index] =>$value];
+        }
+       }
+       
         return response()->json([
             'vaccineSchedule' => $result,
             'vacItems' => $dataArray,
+            'dosesArray'=>$dosesDates,
             'status' => 200
         ]);
     }
