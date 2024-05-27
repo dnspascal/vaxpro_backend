@@ -7,7 +7,8 @@ use App\Models\ParentsGuardians;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-
+use App\Models\Ward;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -19,6 +20,10 @@ class UserController extends Controller
             $user = Auth::user();
             $parent = ParentsGuardians::where('user_id',$user->id)->first();
             $user['role'] = Auth::user()->role;
+
+            if($user->role->account_type == "ministry"){
+                return response()->json([$user],200);
+            }
 
             if (!is_null($user->district_id)) {
                 $user['district'] = Auth::user()->district->region;
@@ -46,7 +51,19 @@ class UserController extends Controller
             if (!is_null($parent)) {
                 $child = $parent->children()->first();
                 $user['child'] = $child; 
+                $ward = Ward::where('id',$child->ward_id)->first();
+                $user['parent'] = $parent;
+                $user['ward'] = $ward->ward_name.", ".$ward->district->district_name;
                 
+                function calculateAge($dateString) {
+                    $birthDate = Carbon::parse($dateString);
+                    $currentDate = Carbon::now();
+                    $age = $currentDate->diffInYears($birthDate);
+
+                        return  $age;
+                }
+
+                $user['age'] = calculateAge($user->date_of_birth);
                 return response()->json($user,200);
             }
 

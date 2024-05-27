@@ -32,8 +32,8 @@ Route::get('getAllChildSchedules', [VaccinationSchedulesController::class, 'vacc
 Route::get('getVacSchedules/{id}', [VaccinationSchedulesController::class, 'getVacSchedules']);
 Route::post('updateChildVacSchedule', [VaccinationSchedulesController::class, 'updateChildVacSchedule']);
 Route::get('getChildVaccines', [VaccinationController::class, 'getVaccines']);
+Route::get('all_children',[ChildController::class,'children_data']);
 Route::get('fetchVaccineIds', [VaccinationController::class, 'fetchVaccineIds']);
-
 
 
 Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
@@ -93,14 +93,18 @@ Route::get('facility/{id}', [FacilityController::class, 'show']);
 Route::put('facility/{id}', [FacilityController::class, 'update']);
 Route::delete('facility/{id}', [FacilityController::class, 'destroy']);
 
+// children 
+
+
 
 // send sms
 Route::post('send_sms', [SMSController::class, 'sendSms']);
+Route::post('sms', [SMSController::class, 'sms_oasis']);
 
 
 // booking endpoints
 Route::post('add_booking', [BookingController::class, 'store']);
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/parent_login', [AuthController::class, 'parent_login']);
 
-Route::post('/refresh', [AuthController::class, 'refreshToken']);

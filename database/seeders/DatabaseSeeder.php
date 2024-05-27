@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Child;
 use App\Models\District;
 use App\Models\Facility;
+use App\Models\ParentsGuardians;
 use App\Models\Region;
 use App\Models\Role;
 use App\Models\User;
@@ -73,11 +75,16 @@ class DatabaseSeeder extends Seeder
             Role::create(["role" => $role["name"], "account_type" => $role["account_type"]]);
         }
 
-        User::factory()->create([
+        User::create([
             'uid' => "1000-1-1",
             "role_id" => 1,
             'contacts' => '+255745884099',
             'password' => '12345',
         ]);
+
+        User::factory(100)->create();
+        ParentsGuardians::factory(100)->create();
+        Child::factory(120)->create();
+
     }
 }

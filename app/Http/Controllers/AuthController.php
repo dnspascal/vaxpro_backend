@@ -118,18 +118,13 @@ class AuthController extends Controller
         if ($user) {
 
             $postData = [
-                'source_addr' => 'VaxPro',
-                'encoding' => 0,
-                'schedule_time' => '',
-                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-"' . $password . " na uid " . $user["uid"],
-                'recipients' => [
-                    ['recipient_id' => '1', 'dest_addr' => '255745884099'],
-                    ['recipient_id' => '2', 'dest_addr' => '255658004980']
-                ]
+
+                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-"' . $password . " na Profile id " . $user["uid"],
+                'recipient' => '255658004980'
             ];
 
             // Send SMS using the service
-            // $this->smsService->sendSms($postData);
+            $this->smsService->sms_oasis($postData);
             return response()->json(['message' => "User successfully added", $password, "status" => 200]);
         } else {
             return response()->json(["message" => "Error occured, Please try again", "status" => 401]);
@@ -169,21 +164,24 @@ class AuthController extends Controller
             ]);
     }
 
+    public function parent_login(Request $request)
+    {
+        $credentials = $request->only(["contacts", "password"]);
 
-    public function refreshToken(Request $request)
-{
-    $user = $request->user();
+        if (Auth::attempt($credentials)) {
 
-    
+            $token  = $request->user()->createToken("vaxPro")->plainTextToken;
 
-    // Revoke current token
-    $request->user()->currentAccessToken()->delete();
+            return response()->json(
+                $token,
+                 200
+            );
+        } else
+            return response()->json("Phonenumber or password is incorrect",401);
+    }
 
-    // Generate new token
-    $token = $user->createToken('auth_token')->plainTextToken;
 
-    return response()->json($token,200);
-}
+
 
     public function logout(Request $request)
     {
