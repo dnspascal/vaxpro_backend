@@ -12,6 +12,7 @@ use App\Models\Role;
 use App\Helpers\GenerateRoleIdHelper;
 use App\Helpers\GeneratePasswordHelper;
 use App\Services\SmsService;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -130,11 +131,12 @@ class AuthController extends Controller
             }
         }
         if ($user) {
-
+            $recipient = $request->input('contacts');
+            $to_user = explode('+',$recipient)[1];
             $postData = [
 
-                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-"' . $password . " na Profile id " . $user["uid"],
-                'recipient' => '255658004980'
+                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-'." . $password .". " na Profile id " . $user["uid"],
+                'recipient' => $to_user
             ];
 
             // Send SMS using the service

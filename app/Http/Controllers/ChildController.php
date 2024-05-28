@@ -73,7 +73,8 @@ class ChildController extends Controller
             return response()->json([
                 'message' => 'Parent added successfully!',
                 'password' => $password,
-                'cardNo' => $child->card_no
+                'cardNo' => $child->card_no,
+                "birthDate"=>$child->date_of_birth
             ],200);
 
         } else if (!$childExists && $parentExists) {
@@ -85,21 +86,18 @@ class ChildController extends Controller
                 'date_of_birth' => $request->birth_date,
                 'house_no' => $request->house_no,
                 'ward_id' => $ward_id,
-                'facility_id' => '123705-21',
-                'modified_by' => '12345'
+                'facility_id' => $request->facility_id,
+                'modified_by' => $request->modified_by
+
             ]);
+            
+            $parentData->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
 
-            // ParentsGuardiansChild::create([
-            //     'parents_guardians_id' => $parentData->nida_id,
-            //     'child_id' => $child->card_no,
-            //     'relationship_with_child' => 'parent',
-            // ]);
-
-            //  $parent->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
             return response()->json([
                 'message' => 'Child added successfully!',
-                'status' => 200,
-            ]);
+                'cardNo' => $child->card_no,
+                "birthDate"=>$child->date_of_birth
+            ],200);
         }
         return response()->json([
             'message' => 'Child not added!',
