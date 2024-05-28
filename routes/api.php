@@ -23,7 +23,7 @@ Route::get('getVaccine/{id}', [VaccinationController::class, 'getVaccine']);
 Route::put('updateVaccine/{id}', [VaccinationController::class, 'updateVaccine']);
 Route::delete('deleteVaccine/{id}', [VaccinationController::class, 'deleteVaccine']);
 Route::post('parentChildData', [ChildController::class, 'parentChildData']);
-// Route::get('generateSchedule', [VaccinationSchedulesController::class, 'vaccine']);
+Route::get('getSavedSchedules/{id}', [VaccinationSchedulesController::class, 'getSavedSchedules']);
 Route::get('getChildParentData', [ChildController::class, 'getChildParentData']);
 Route::get('children', [ChildController::class, 'children']);
 Route::get('parents', [ParentController::class, 'parents']);
