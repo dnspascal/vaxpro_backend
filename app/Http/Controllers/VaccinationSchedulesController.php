@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Child;
 use App\Models\ChildVaccination;
 use App\Models\ChildVaccinationSchedule;
 use App\Models\HealthWorker;
@@ -25,17 +26,18 @@ class VaccinationSchedulesController extends Controller
             }
         }
 
-        $vaccinesNames = ["BCG", "MR2"];
         foreach ($dataArray as $key => $vaccineItem) {
             $dates = array(); // Clear $dates array for each vaccine
-
-            $dates[] = Carbon::createFromFormat('Y-m-d', $request->date)
-                ->addDays($vaccineItem->first_dose_after)
-                ->format('Y-m-d');
-
-            $dates[] = Carbon::createFromFormat('Y-m-d', end($dates))
-                ->addDays($vaccineItem->second_dose_after)
-                ->format('Y-m-d');
+            if ($vaccineItem->frequency >= 1) {
+                $dates[] = Carbon::createFromFormat('Y-m-d', $request->date)
+                    ->addDays($vaccineItem->first_dose_after)
+                    ->format('Y-m-d');
+            }
+            if ($vaccineItem->frequency >= 2) {
+                $dates[] = Carbon::createFromFormat('Y-m-d', end($dates))
+                    ->addDays($vaccineItem->second_dose_after)
+                    ->format('Y-m-d');
+            }
 
             if ($vaccineItem->frequency >= 3) {
                 $dates[] = Carbon::createFromFormat('Y-m-d', end($dates))
@@ -150,13 +152,20 @@ class VaccinationSchedulesController extends Controller
         }
     }
 
-    public function getSavedSchedules($child_id){
+    public function getSavedSchedules($child_id)
+    {
+        $birth_date = Child::where('card_no', $child_id)->value('date_of_birth');
         $child_schedules = ChildVaccinationSchedule::where('child_id', $child_id)->get();
-        if($child_schedules){
-            foreach( $child_schedules as $child_schedule ){
+        if ($child_schedules) {
+            foreach ($child_schedules as $child_schedule) {
                 $child_schedule['vaccine_id'] = ChildVaccination::where('id', $child_schedule['child_vaccination_id'])->value('vaccination_id');
             }
-            return $child_schedules;
+
+            return response()->json([
+                'child_schedules' => $child_schedules,
+                'birth_date' => $birth_date
+            ]);
+           
         }
     }
 }
