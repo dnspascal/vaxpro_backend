@@ -15,14 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string("name");
             $table->integer("frequency");
-            $table->longText("vaccine_against");
+            $table->string("abbrev");
             $table->integer("first_dose_after");
             $table->integer("second_dose_after")->nullable();
             $table->integer("third_dose_after")->nullable();
             $table->integer("fourth_dose_after")->nullable();
             $table->integer("fifth_dose_after")->nullable();
-            $table->string("administered_via");
-            $table->longText("side_effects");
             $table->timestamps();
         });
     }

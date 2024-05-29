@@ -16,7 +16,7 @@ class HealthWorkerSeeder extends Seeder
     {
         $user = User::create([
             'uid' => "5000-1-1",
-            "role_id" => 1,
+            "role_id" => 11,
             'contacts' => '+255745884009',
             'password' => '12345',
             "facility_id" => "123705-4",
