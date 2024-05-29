@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ChildVaccination;
 use App\Models\ChildVaccinationSchedule;
+use App\Models\HealthWorker;
 use App\Models\Vaccination;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -17,14 +18,15 @@ class VaccinationSchedulesController extends Controller
 
         $vacccineData =  $request->vaccines;
 
-        foreach ($vacccineData as $key => $value) {
+        foreach ($vacccineData as $value) {
             $vaccineData = Vaccination::where('id', $value)->first();
             if ($vaccineData) {
                 $dataArray[] = $vaccineData;
             }
         }
 
-        foreach ($dataArray as $vaccineItem) {
+        $vaccinesNames = ["BCG", "MR2"];
+        foreach ($dataArray as $key => $vaccineItem) {
             $dates = array(); // Clear $dates array for each vaccine
 
             $dates[] = Carbon::createFromFormat('Y-m-d', $request->date)
@@ -53,13 +55,27 @@ class VaccinationSchedulesController extends Controller
                     ->format('Y-m-d');
             }
 
-            $result = $dates;
+            $dosesDates = array();
+            $doses = ["first_dose", "second_dose", "third_dose", "fourth_dose", "fifth_dose"];
+            foreach ($dates as $index => $value) {
+                $dosesDates[] = [$doses[$index] => $value];
+            }
+
+            $result[$vaccineItem->name] = $dosesDates;
         }
 
+        $dosesDates = array();
+        $doses = ["first_dose", "second_dose", "third_dose", "fourth_dose", "fifth_dose"];
+        foreach ($result as  $vaccinations) {
+            foreach ($vaccinations as $index => $value) {
+                $dosesDates[] = [$doses[$index] => $value];
+            }
+        }
 
         return response()->json([
             'vaccineSchedule' => $result,
             'vacItems' => $dataArray,
+            'dosesArray' => $dosesDates,
             'status' => 200
         ]);
     }
@@ -86,53 +102,61 @@ class VaccinationSchedulesController extends Controller
 
     public function updateChildVacSchedule(Request $request)
     {
-        $dates = array();
-        $vaccineId = ChildVaccination::where('id', $request->vac_id)->value('vaccination_id');
-        $vaccine = Vaccination::where('id', $vaccineId)->first();
+        $vaccine = Vaccination::where('id', $request->vaccine_id)->first();
+        $freq = 0;
         if ($vaccine) {
-            $dates[] = Carbon::createFromFormat('Y-m-d', $request->curr_date)
-                ->addDays($vaccine->first_dose_after)
-                ->format('Y-m-d');
-            $dates[] = Carbon::createFromFormat('Y-m-d', end($dates))
-                ->addDays($vaccine->second_dose_after)
-                ->format('Y-m-d');
-
-            $dates[] = Carbon::createFromFormat('Y-m-d', end($dates))
-                ->addDays($vaccine->third_dose_after)
-                ->format('Y-m-d');
-
-            $dates[] = Carbon::createFromFormat('Y-m-d', end($dates))
-                ->addDays($vaccine->fourth_dose_after)
-                ->format('Y-m-d');
-
-            $dates[] = Carbon::createFromFormat('Y-m-d', end($dates))
-                ->addDays($vaccine->fifth_dose_after)
-                ->format('Y-m-d');
-        }
-
-
-        $child_vac_schedule = ChildVaccinationSchedule::where('child_id', $request->child_id)
-            ->where('child_vaccination_id', $request->vac_id)
-            ->first();
-        if ($child_vac_schedule) {
-
-            $child_vac_schedule->vaccination_date = $child_vac_schedule->next_vaccination_date;
-
-            foreach ($dates as $date) {
-                $dateCarbon = Carbon::createFromFormat('Y-m-d', $date);
-                if ($dateCarbon > $child_vac_schedule->next_vaccination_date) {
-                    $child_vac_schedule->next_vaccination_date = $dateCarbon;
-                    break;
-                }
+            $child_vaccination_id = ChildVaccination::where('vaccination_id', $vaccine->id)->value('id');
+            if ($request->index == 0) {
+                $freq = 1;
+                $next_date = Carbon::createFromFormat('Y-m-d', $request->selected_date)
+                    ->addDays($vaccine->second_dose_after)
+                    ->format('Y-m-d');
+            } elseif ($request->index == 1) {
+                $freq = 2;
+                $next_date = Carbon::createFromFormat('Y-m-d', $request->selected_date)
+                    ->addDays($vaccine->third_dose_after)
+                    ->format('Y-m-d');
+            } elseif ($request->index == 2) {
+                $freq = 3;
+                $next_date = Carbon::createFromFormat('Y-m-d', $request->selected_date)
+                    ->addDays($vaccine->fourth_dose_after)
+                    ->format('Y-m-d');
+            } elseif ($request->index == 3) {
+                $freq = 4;
+                $next_date = Carbon::createFromFormat('Y-m-d', $request->selected_date)
+                    ->addDays($vaccine->fifth_dose_after)
+                    ->format('Y-m-d');
+            } elseif ($request->index == 4) {
+                $freq = 5;
+                $next_date = Carbon::createFromFormat('Y-m-d', $request->selected_date)
+                    ->addDays($vaccine->sixth_dose_after)
+                    ->format('Y-m-d');
             }
 
+            $health_worker_id = HealthWorker::where('user_id', $request->health_worker_id)->value('staff_id');
 
-            $child_vac_schedule->save();
+
+            $child_schedule = ChildVaccinationSchedule::create([
+                'child_vaccination_id' => $child_vaccination_id,
+                'child_id' => $request->child_id,
+                'health_worker_id' => $health_worker_id,
+                'facility_id' => $request->facility_id,
+                'frequency' => $freq,
+                'vaccination_date' => $request->selected_date,
+                'next_vaccination_date' => $next_date,
+                'status' => true,
+
+            ]);
         }
+    }
 
-        return response()->json([
-            'Dates' => $dates,
-            'status' => 200
-        ]);
+    public function getSavedSchedules($child_id){
+        $child_schedules = ChildVaccinationSchedule::where('child_id', $child_id)->get();
+        if($child_schedules){
+            foreach( $child_schedules as $child_schedule ){
+                $child_schedule['vaccine_id'] = ChildVaccination::where('id', $child_schedule['child_vaccination_id'])->value('vaccination_id');
+            }
+            return $child_schedules;
+        }
     }
 }

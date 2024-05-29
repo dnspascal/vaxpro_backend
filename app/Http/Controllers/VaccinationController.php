@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChildVaccination;
 use App\Models\Vaccination;
 use Illuminate\Http\Request;
 
@@ -91,11 +92,19 @@ class VaccinationController extends Controller
             ]);
         }
     }
-    public function fetchVaccineIds()
+    public function fetchVaccineIds(Request $request)
     {
         $vaccines = Vaccination::all();
         $vaccine_id_array = array();
         foreach ($vaccines as $vaccine) {
+            $check_vaccine = ChildVaccination::where('vaccination_id', $vaccine->id)->first();
+            if (!$check_vaccine) {
+                ChildVaccination::create([
+                    'child_id' => $request->child_id,
+                    'vaccination_id' =>  $vaccine->id,
+                    'is_active' => true,
+                ]);
+            }
 
             $vaccine_id_array[] =  $vaccine->id;
         }
@@ -104,6 +113,4 @@ class VaccinationController extends Controller
             'vaccineIds' => $vaccine_id_array,
         ]);
     }
-
-   
 }

@@ -74,7 +74,7 @@ class ChildController extends Controller
                 'message' => 'Parent added successfully!',
                 'password' => $password,
                 'cardNo' => $child->card_no,
-                "birthDate"=>$child->date_of_birth
+                'birthDate' => $child->date_of_birth
             ],200);
 
         } else if (!$childExists && $parentExists) {
@@ -88,7 +88,6 @@ class ChildController extends Controller
                 'ward_id' => $ward_id,
                 'facility_id' => $request->facility_id,
                 'modified_by' => $request->modified_by
-
             ]);
             
             $parentData->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
