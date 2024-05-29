@@ -1,6 +1,4 @@
 <?php
-
-
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\FacilityController;
@@ -14,7 +12,7 @@ use App\Http\Controllers\SMSController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\VaccinationSchedulesController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\CertificatesController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('createVaccine', [VaccinationController::class, 'createVaccine']);
@@ -32,8 +30,8 @@ Route::post('getAllChildSchedules', [VaccinationSchedulesController::class, 'vac
 Route::get('getVacSchedules/{id}', [VaccinationSchedulesController::class, 'getVacSchedules']);
 Route::post('updateChildVacSchedule', [VaccinationSchedulesController::class, 'updateChildVacSchedule']);
 Route::get('getChildVaccines', [VaccinationController::class, 'getVaccines']);
+Route::get('all_children',[ChildController::class,'children_data']);
 Route::get('fetchVaccineIds', [VaccinationController::class, 'fetchVaccineIds']);
-
 
 
 Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
@@ -57,10 +55,14 @@ Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
     //roles endpoints
     Route::get("/roles", [RoleController::class, "index"]);
 
+    //certificates
+
     //booking endpoints
 });
+Route::post("/certificates", [CertificatesController::class,"store"]);
 
-Route::get('hospital_bookings/{id}',[BookingController::class,'show']);
+
+Route::get('hospital_bookings/{id}', [BookingController::class,'show']);
 
 
 // regions endpoints
@@ -93,14 +95,18 @@ Route::get('facility/{id}', [FacilityController::class, 'show']);
 Route::put('facility/{id}', [FacilityController::class, 'update']);
 Route::delete('facility/{id}', [FacilityController::class, 'destroy']);
 
+// children 
+
+
 
 // send sms
 Route::post('send_sms', [SMSController::class, 'sendSms']);
+Route::post('sms', [SMSController::class, 'sms_oasis']);
 
 
 // booking endpoints
 Route::post('add_booking', [BookingController::class, 'store']);
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/parent_login', [AuthController::class, 'parent_login']);
 
-Route::post('/refresh', [AuthController::class, 'refreshToken']);

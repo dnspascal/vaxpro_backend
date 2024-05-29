@@ -2,43 +2,30 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\Ward;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Helpers\GenerateRoleIdHelper;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
- */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
+    protected $model = User::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+    public function definition()
     {
+
+        $ward = Ward::all()->random();
+
+
+        $uid = GenerateRoleIdHelper::generateRoleId("parent",  null, null, $ward->id);
+
         return [
-            // 'name' => fake()->name(),
-            // 'email' => fake()->unique()->safeEmail(),
-            // 'email_verified_at' => now(),
-            // 'password' => static::$password ??= Hash::make('password'),
-            // 'remember_token' => Str::random(10),
+            'uid' => $this->faker->unique()->numerify('######'),
+            'role_id' => 10,
+            'password' => Hash::make("12345"), // or use a hash function
+            'ward_id' => $ward->id,
+            'contacts' => $this->faker->unique()->phoneNumber,
         ];
-    }
-
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
     }
 }

@@ -12,6 +12,8 @@ use App\Models\Role;
 use App\Helpers\GenerateRoleIdHelper;
 use App\Helpers\GeneratePasswordHelper;
 use App\Services\SmsService;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -25,6 +27,19 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+       $validate = Validator::make($request->only('contacts'),[
+           'contacts'=>["unique:users,contacts"]
+       ]) ;
+
+       if($validate->fails()){
+           return response()->json(["error"=>"contacts","message"=>"This contact is already taken"],400);
+       }
+//           $request->validate([
+//            "contacts"=>"unique:users,contacts",
+//        ],[
+//            'contacts.unique' => "This contact already exists.",
+//        ]);
+
 
         if ($request->has("ward_id")) {
 
@@ -116,20 +131,16 @@ class AuthController extends Controller
             }
         }
         if ($user) {
-
+            $recipient = $request->input('contacts');
+            $to_user = explode('+',$recipient)[1];
             $postData = [
-                'source_addr' => 'VaxPro',
-                'encoding' => 0,
-                'schedule_time' => '',
-                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-"' . $password . " na uid " . $user["uid"],
-                'recipients' => [
-                    ['recipient_id' => '1', 'dest_addr' => '255745884099'],
-                    ['recipient_id' => '2', 'dest_addr' => '255658004980']
-                ]
+
+                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-'." . $password .". " na Profile id " . $user["uid"],
+                'recipient' => $to_user
             ];
 
             // Send SMS using the service
-            // $this->smsService->sendSms($postData);
+            $this->smsService->sms_oasis($postData);
             return response()->json(['message' => "User successfully added", $password, "status" => 200]);
         } else {
             return response()->json(["message" => "Error occured, Please try again", "status" => 401]);
@@ -138,9 +149,20 @@ class AuthController extends Controller
 
     public function update(Request $request, $id)
     {
+
+
+        $validate = Validator::make($request->only('contacts'),[
+            'contacts'=>["unique:users,contacts"]
+        ]) ;
+
+        if($validate->fails()){
+            return response()->json(["error"=>"contacts","message"=>"This contact is already taken"],400);
+        }
+
         $user  =  User::find($id);
 
         if ($request->has('contacts')) {
+
             $user->contacts = $request->contacts;
         }
 
@@ -169,21 +191,24 @@ class AuthController extends Controller
             ]);
     }
 
+    public function parent_login(Request $request)
+    {
+        $credentials = $request->only(["contacts", "password"]);
 
-    public function refreshToken(Request $request)
-{
-    $user = $request->user();
+        if (Auth::attempt($credentials)) {
 
-    
+            $token  = $request->user()->createToken("vaxPro")->plainTextToken;
 
-    // Revoke current token
-    $request->user()->currentAccessToken()->delete();
+            return response()->json(
+                $token,
+                 200
+            );
+        } else
+            return response()->json("Phonenumber or password is incorrect",401);
+    }
 
-    // Generate new token
-    $token = $user->createToken('auth_token')->plainTextToken;
 
-    return response()->json($token,200);
-}
+
 
     public function logout(Request $request)
     {

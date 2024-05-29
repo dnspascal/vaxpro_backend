@@ -20,12 +20,12 @@ class Child extends Model
     {
         return $this->hasMany(Booking::class);
     }
-    
+
     public function child_vaccination_schedules()
     {
         return $this->hasMany(ChildVaccinationSchedule::class);
     }
-    
+
 
     public function vaccinations()
     {
@@ -55,6 +55,10 @@ class Child extends Model
     public function parents_guardians()
     {
         return $this->belongsToMany(ParentsGuardians::class, 'parents_guardians_children','card_no','nida_id',)->withPivot('relationship_with_child');
-        
+
+    }
+
+    public function certificates(){
+        return $this->hasMany(Certificates::class);
     }
 }

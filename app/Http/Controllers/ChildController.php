@@ -86,21 +86,17 @@ class ChildController extends Controller
                 'date_of_birth' => $request->birth_date,
                 'house_no' => $request->house_no,
                 'ward_id' => $ward_id,
-                'facility_id' => '123705-21',
-                'modified_by' => '12345'
+                'facility_id' => $request->facility_id,
+                'modified_by' => $request->modified_by
             ]);
+            
+            $parentData->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
 
-             $parent = ParentsGuardiansChild::create([
-                'parents_guardians_id' => $parentData->nida_id,
-                'child_id' => $child->card_no,
-                'relationship_with_child' => 'parent',
-            ]);
-
-             $parent->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
             return response()->json([
                 'message' => 'Child added successfully!',
-                'status' => 200,
-            ]);
+                'cardNo' => $child->card_no,
+                "birthDate"=>$child->date_of_birth
+            ],200);
         }
         return response()->json([
             'message' => 'Child not added!',
@@ -156,5 +152,14 @@ class ChildController extends Controller
                 'status' => 200
             ]);
         }
+    }
+
+    public function children_data(){
+        $children = Child::all(); 
+        $success = 100*((88-12)/count($children) );
+
+        $approx = number_format($success,2);
+
+        return response()->json(['registered_children'=>count($children),'vaccinated_children'=>88,'unvaccinated_children'=>12,'success'=>$approx]);
     }
 }
