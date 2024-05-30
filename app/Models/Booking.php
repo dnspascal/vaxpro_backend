@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     use HasFactory;
-    protected $fillable = ['child_id','vaccination_date','facility_id','vaccine_list'];
+    protected $fillable = ['child_id','vaccination_date','facility_id','vaccine_list','status', 'rejection_reason'];
 
     protected $casts = [
         'vaccine_list' => 'array',
