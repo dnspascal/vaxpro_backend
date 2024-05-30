@@ -17,6 +17,8 @@ return new class extends Migration
             $table->dateTime('vaccination_date');
             $table->string('facility_id');
             $table->json('vaccine_list');
+            $table->string("status")->default("pending");
+            $table->string("rejection_reason")->nullable();
             $table->foreign('child_id')->references('card_no')->on('children')->onDelete('cascade');
             $table->foreign('facility_id')->references('facility_reg_no')->on('facilities')->onDelete('cascade');
             $table->timestamps();
