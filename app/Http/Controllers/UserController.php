@@ -41,7 +41,6 @@ class UserController extends Controller
             }
 
             
-
             if (count($user->health_workers)!= 0) {
                 $health_worker = HealthWorker::where('user_id',$user->id)->first();
                 $user['health_worker'] = $health_worker;
