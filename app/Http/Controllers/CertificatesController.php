@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 
+
 class CertificatesController extends Controller
 {
     public function store(Request $request): JsonResponse
