@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->string('child_id');
-            $table->dateTime('vaccination_date');
+            $table->date('vaccination_date');
             $table->string('facility_id');
             $table->json('vaccine_list');
             $table->string("status")->default("pending");

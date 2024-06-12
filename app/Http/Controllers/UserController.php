@@ -40,7 +40,7 @@ class UserController extends Controller
                 return response()->json([$user]);
             }
 
-            
+
             if (count($user->health_workers)!= 0) {
                 $health_worker = HealthWorker::where('user_id',$user->id)->first();
                 $user['health_worker'] = $health_worker;
@@ -48,12 +48,12 @@ class UserController extends Controller
             }
 
             if (!is_null($parent)) {
-                $child = $parent->children()->first();
-                $user['child'] = $child; 
-                $ward = Ward::where('id',$child->ward_id)->first();
+                $child = $parent->children()->get();
+                $user['children'] = $child;
+                $ward = Ward::where('id',$user->ward_id)->first();
                 $user['parent'] = $parent;
                 $user['ward'] = $ward->ward_name.", ".$ward->district->district_name;
-                
+
                 function calculateAge($dateString) {
                     $birthDate = Carbon::parse($dateString);
                     $currentDate = Carbon::now();
@@ -76,7 +76,7 @@ class UserController extends Controller
     public function allUsers(Request $request)
     {
 
-        
+
         $loggedInUser = User::find($request->id);
         switch ($loggedInUser->role->account_type) {
             case "ministry":

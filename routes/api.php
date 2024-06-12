@@ -66,6 +66,10 @@ Route::get('hospital_bookings/{id}', [BookingController::class,'show']);
 Route::get("indexBooking/{card_no}", [BookingController::class,'indexBooking']);
 Route::put('/update_booking/{id}', [BookingController::class, 'update']);
 
+//parent bookings
+Route::get('parent_bookings/{id}', [BookingController::class,'parent_bookings']);
+Route::get('delete_booking/{id}', [BookingController::class, 'destroy']);
+
 
 // regions endpoints
 Route::post('region', [RegionController::class, 'create']);

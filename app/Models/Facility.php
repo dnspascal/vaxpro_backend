@@ -10,9 +10,12 @@ class Facility extends Model
     use HasFactory;
 
     protected $fillable = ['facility_reg_no','facility_name','contacts','ward_id',];
+    protected $primaryKey = 'facility_reg_no';
+    public  $incrementing = false;
+
 
     public function bookings(){
-        return $this->hasMany(Booking::class);
+        return $this->hasMany(Booking::class, 'facility_id', 'facility_reg_no');
     }
     public function child_vaccination_schedules(){
         return $this->hasMany(ChildVaccinationSchedule::class);
