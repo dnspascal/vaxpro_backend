@@ -17,9 +17,9 @@ use App\Models\Role;
 class ChildController extends Controller
 {
     public function parentChildData(Request $request)
-    {  
+    {
         $request->all();
-        
+
         // $ward_id = explode('-', $request->ward_id);
         // $ward_id = end($ward_id);
         // $ward_id = (int) $ward_id;
@@ -32,8 +32,8 @@ class ChildController extends Controller
 
 
         if (!$childExists && !$parentExists) {
-            
-          
+
+
             $child = Child::create([
                 'card_no' => $request->card_no,
                 'firstname' => $request->first_name,
@@ -91,7 +91,7 @@ class ChildController extends Controller
                 'facility_id' => $request->facility_id,
                 'modified_by' => $request->modified_by
             ]);
-            
+
             $parentData->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
 
             return response()->json([
@@ -157,8 +157,13 @@ class ChildController extends Controller
     }
 
     public function children_data(){
-        $children = Child::all(); 
+        $children = Child::all();
         $success = 100*((88-12)/count($children) );
+
+        $vaccinated_children = Child::whereDoesntHave('vaccinations', function ($query) {
+            $query->where('is_active', '!=', 0);
+        })->get();
+
 
         $approx = number_format($success,2);
 
