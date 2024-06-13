@@ -6,6 +6,7 @@ use App\Models\Child;
 use App\Models\ChildVaccination;
 use App\Models\ChildVaccinationSchedule;
 use App\Models\HealthWorker;
+use App\Models\MidEntryChild;
 use App\Models\Vaccination;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -152,6 +153,62 @@ class VaccinationSchedulesController extends Controller
         }
     }
 
+    public function updateSelectedVacs(Request $request)
+    {
+
+        $data = $request->data;
+        $dates = $data['dates'];
+        $health_worker_id = $data['health_worker_id'];
+        $facility_id = $data['facility_id'];
+        $child_id = $data['child_id'];
+
+        $health_worker = HealthWorker::where('user_id', $health_worker_id)->value('staff_id');
+
+
+        $frequencyCounter = [];
+
+
+
+        foreach ($dates as $frequency => $dateArray) {
+
+            $vaccine = ChildVaccination::where('vaccination_id',$frequency)->where('child_id',$child_id)->first();
+
+            if(!$vaccine){
+               $vaccine =  ChildVaccination::create([
+                    'child_id' => $child_id,
+                    'vaccination_id' =>$frequency,
+                    'is_active' => true,
+                ]);
+            }
+
+            if (!isset($frequencyCounter[$frequency])) {
+                $frequencyCounter[$frequency] = 0;
+            }
+
+            for ($i = 0; $i < count($dateArray); $i++) {
+
+                $frequencyCounter[$frequency]++;
+
+                $vaccination_date = $dateArray[$i];
+
+                $next_vaccination_date = isset($dateArray[$i + 1]) ? $dateArray[$i + 1] : null;
+
+
+                ChildVaccinationSchedule::create([
+                    'child_vaccination_id' => $vaccine->id,
+                    'child_id' => $child_id,
+                    'health_worker_id' => $health_worker,
+                    'facility_id' => $facility_id,
+                    'frequency' => $frequencyCounter[$frequency],
+                    'vaccination_date' => $vaccination_date,
+                    'next_vaccination_date' => $next_vaccination_date,
+                    'status' => true,
+                ]);
+            }
+        }
+    }
+
+
     public function getSavedSchedules($child_id)
     {
         $birth_date = Child::where('card_no', $child_id)->value('date_of_birth');
@@ -159,13 +216,15 @@ class VaccinationSchedulesController extends Controller
         if ($child_schedules) {
             foreach ($child_schedules as $child_schedule) {
                 $child_schedule['vaccine_id'] = ChildVaccination::where('id', $child_schedule['child_vaccination_id'])->value('vaccination_id');
+                $child_schedule['total_freq'] = Vaccination::where('id', $child_schedule['vaccine_id'])->value('frequency');
             }
+
+
 
             return response()->json([
                 'child_schedules' => $child_schedules,
-                'birth_date' => $birth_date
+                'birth_date' => $birth_date,
             ]);
-           
         }
     }
 }

@@ -6,6 +6,7 @@ use App\Helpers\GeneratePasswordHelper;
 use App\Helpers\GenerateRoleIdHelper;
 use App\Models\Child;
 use App\Models\ChildVaccination;
+use App\Models\MidEntryChild;
 use App\Models\Vaccination;
 use App\Models\ParentsGuardians;
 use App\Models\ParentsGuardiansChild;
@@ -19,10 +20,9 @@ class ChildController extends Controller
     public function parentChildData(Request $request)
     {
         $request->all();
-
-        // $ward_id = explode('-', $request->ward_id);
-        // $ward_id = end($ward_id);
-        // $ward_id = (int) $ward_id;
+        $ward_id = explode('-', $request->ward_id);
+        $ward_id = end($ward_id);
+        $ward_id = (int) $ward_id;
 
         $ward_id = $request->ward;
 
@@ -54,7 +54,7 @@ class ChildController extends Controller
 
             $user = User::create([
                 'role_id' => $user_role,
-                'uid' =>  GenerateRoleIdHelper::generateRoleId("parent", null, null ,$ward_id),
+                'uid' =>  GenerateRoleIdHelper::generateRoleId("parent", null, null, $ward_id),
                 'contacts' => $request->contact,
                 'password' => Hash::make($password)
             ]);
@@ -70,15 +70,14 @@ class ChildController extends Controller
             ]);
 
 
-            $parent->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
+            $parent->children()->attach([$child->card_no => ["relationship_with_child" => $request->relation]]);
 
             return response()->json([
                 'message' => 'Parent added successfully!',
                 'password' => $password,
                 'cardNo' => $child->card_no,
                 'birthDate' => $child->date_of_birth
-            ],200);
-
+            ], 200);
         } else if (!$childExists && $parentExists) {
             $child = Child::create([
                 'card_no' => $request->card_no,
@@ -94,16 +93,17 @@ class ChildController extends Controller
 
             $parentData->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
 
+
             return response()->json([
                 'message' => 'Child added successfully!',
                 'cardNo' => $child->card_no,
-                "birthDate"=>$child->date_of_birth
-            ],200);
+                "birthDate" => $child->date_of_birth
+            ], 200);
         }
         return response()->json([
             'message' => 'Child not added!',
             'status' => 400,
-        ],400);
+        ], 400);
     }
 
     public function children(Request $request)
@@ -167,6 +167,9 @@ class ChildController extends Controller
 
         $approx = number_format($success,2);
 
-        return response()->json(['registered_children'=>count($children),'vaccinated_children'=>88,'unvaccinated_children'=>12,'success'=>$approx]);
+
+        return response()->json(['registered_children' => count($children), 'vaccinated_children' => 88, 'unvaccinated_children' => 12, 'success' => $approx]);
     }
+
+
 }
