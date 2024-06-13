@@ -34,12 +34,6 @@ class AuthController extends Controller
        if($validate->fails()){
            return response()->json(["error"=>"contacts","message"=>"This contact is already taken"],400);
        }
-//           $request->validate([
-//            "contacts"=>"unique:users,contacts",
-//        ],[
-//            'contacts.unique' => "This contact already exists.",
-//        ]);
-
 
         if ($request->has("ward_id")) {
 
@@ -48,9 +42,9 @@ class AuthController extends Controller
                 ->doesntExist()
             ) {
                 $uid = GenerateRoleIdHelper::generateRoleId($request->account_type, null, null, $request->ward_id);
-            } 
+            }
             // else if (Role::where('id', $request->role_id)) {
-            
+
             // }
              else {
                 return response()->json(['message' => 'This account exists ', 'status' => 409]);
@@ -149,7 +143,6 @@ class AuthController extends Controller
 
     public function update(Request $request, $id)
     {
-
 
         $validate = Validator::make($request->only('contacts'),[
             'contacts'=>["unique:users,contacts"]

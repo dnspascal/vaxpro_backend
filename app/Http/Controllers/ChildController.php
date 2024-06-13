@@ -19,11 +19,12 @@ class ChildController extends Controller
 {
     public function parentChildData(Request $request)
     {
-        $request->all();
-
+        
         $ward_id = explode('-', $request->ward_id);
         $ward_id = end($ward_id);
         $ward_id = (int) $ward_id;
+
+        $ward_id = $request->ward;
 
         $childExists = Child::where('card_no', $request->card_no)->exists();
         $parentExists = ParentsGuardians::where('nida_id', $request->nida_id)->exists();

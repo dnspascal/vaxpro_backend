@@ -12,12 +12,8 @@ class ParentController extends Controller
         $nida_no = $request->nidaNo;
        
         if (!empty($nida_no)) {
-            // remove the relationship with child because it aint needed init
-            $parents = ParentsGuardians::where('nida_id', 'LIKE', '%' . $nida_no . '%')
-                           ->with(['children' => function ($query) {
-                               $query->withPivot('relationship_with_child');
-                           }, 'user'])
-                           ->get();
+            
+            $parents = ParentsGuardians::where('nida_id', 'LIKE', '%' . $nida_no . '%')->get();
 
            
             return response()->json($parents, 200);
@@ -26,3 +22,4 @@ class ParentController extends Controller
 
     }
 }
+
