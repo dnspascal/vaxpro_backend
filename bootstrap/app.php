@@ -12,12 +12,15 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
+    ->withBroadcasting(
+        __DIR__.'/../routes/channels.php',
+        ['prefix' => 'api', 'middleware' => ['api', 'auth:sanctum']],
+    )
 
     ->withMiddleware(function (Middleware $middleware) {
         // $middleware->statefulApi();
         $middleware->alias(["tokenExpiration" => CheckTokenExpiration::class]);
     })
-
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

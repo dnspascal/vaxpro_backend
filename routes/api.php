@@ -13,6 +13,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\VaccinationSchedulesController;
 use App\Http\Controllers\CertificatesController;
+use App\Http\Controllers\ChatMessageController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('createVaccine', [VaccinationController::class, 'createVaccine']);
@@ -59,6 +60,10 @@ Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
     //certificates
 
     //booking endpoints
+
+
+    //send msg endpoint 
+    Route::post('send_message',[ChatMessageController::class,'store']);
 });
 Route::post("/certificates", [CertificatesController::class,"store"]);
 
