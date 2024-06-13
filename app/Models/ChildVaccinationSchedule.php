@@ -9,7 +9,7 @@ use Carbon\Carbon;
 class ChildVaccinationSchedule extends Model
 {
     use HasFactory;
-    protected $fillable = ['child_vaccination_id','child_id', 'health_worker_id', 'facility_id', 'frequency', 'vaccination_date', 'next_vaccination_date', 'status'];
+    protected $fillable = ['child_vaccination_id','child_id', 'health_worker_id', 'facility_id', 'frequency', 'vaccination_date', 'next_vaccination_date','status'];
 
     public function child_vaccinations()
     {
