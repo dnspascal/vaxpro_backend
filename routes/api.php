@@ -32,6 +32,7 @@ Route::post('updateChildVacSchedule', [VaccinationSchedulesController::class, 'u
 Route::get('getChildVaccines', [VaccinationController::class, 'getVaccines']);
 Route::get('all_children',[ChildController::class,'children_data']);
 Route::get('fetchVaccineIds', [VaccinationController::class, 'fetchVaccineIds']);
+Route::post('updateSelectedVacs', [VaccinationSchedulesController::class,'updateSelectedVacs']);
 
 
 Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
