@@ -20,7 +20,7 @@ class PrivateEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(public User $receiver,public string $message)
+    public function __construct(public string $message)
     {
         //
     }
@@ -33,7 +33,7 @@ class PrivateEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel("private.{$this->receiver->id}"),
+            new PrivateChannel("rico"),
         ];
     }
 }

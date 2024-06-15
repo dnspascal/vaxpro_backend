@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\MessageSent;
 use App\Events\PrivateEvent;
 use App\Events\testingEvent;
 use App\Models\User;
@@ -34,7 +35,9 @@ Route::post('/trial_login', function (Request $request) {
 Route::get('/trial_private', function () {
     // event(new testingEvent("Hellow world"));
     $user = User::find(1);
-    event(new PrivateEvent($user,"Hello world"));
+    $user2 = User::find(102);
+    // broadcast(new PrivateEvent("Hello world private channel"));
+    broadcast(new MessageSent($user2,$user,"This worked"));
     return "done";
 });
 
