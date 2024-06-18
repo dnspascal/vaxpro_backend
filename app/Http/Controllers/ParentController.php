@@ -10,15 +10,18 @@ class ParentController extends Controller
 {
     public function parents(Request $request){
         $nida_no = $request->nidaNo;
-       
+
         if (!empty($nida_no)) {
-            
-            $parents = ParentsGuardians::where('nida_id', 'LIKE', '%' . $nida_no . '%')->get();
 
-           
-            return response()->json($parents, 200);
+            $parent = ParentsGuardians::where('nida_id', $nida_no)->with('user')->first();
+       if($parent){
+           return response()->json($parent, 200);
+
+       }
+            return response()->json(null,404);
+
         }
-
+        return response()->noContent();
 
     }
 }

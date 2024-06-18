@@ -140,6 +140,7 @@ class ChildController extends Controller
         if ($id) {
             $child_data = Child::where('card_no', $id)
                 ->with([
+                    'certificates',
                     'parents_guardians' => function ($query) {
                         $query->withPivot('relationship_with_child');
                     },

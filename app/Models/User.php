@@ -76,10 +76,10 @@ class User extends Authenticatable
         return $this->hasMany(HealthWorker::class);
     }
 
-    public function children()
-    {
-        return $this->hasMany(Child::class);
-    }
+//    public function children()
+//    {
+//        return $this->hasMany(Child::class);
+//    }
 
 
     //user who adds the facility

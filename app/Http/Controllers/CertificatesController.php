@@ -23,7 +23,7 @@ class CertificatesController extends Controller
         $hpvCertificatesPath = null;
 
         $request->hasFile("certificate") &&
-            $certificatesPath = $request->file('certificate')->store('public/certificates');
+            $certificatesPath = $request->file('certificate')->store('certificates','public');
 
         $request->hasFile("hpv_certificate") &&
             $hpvCertificatesPath = $request->file('hpv_certificate')->store('public/hpv_certificates');
@@ -39,6 +39,17 @@ class CertificatesController extends Controller
        } else {
            return response()->json(["message"=>"Certificate Store Failed", "status"=>500]);
        }
+    }
+
+    public function show(string $card_no): JsonResponse
+    {
+        $certificate = Certificates::where('child_id', $card_no)->first();
+
+        if (!$certificate) {
+            return response()->json(['error' => 'Certificate not found'], 404);
+        }
+
+        return response()->json($certificate, 200);
     }
 
 }
