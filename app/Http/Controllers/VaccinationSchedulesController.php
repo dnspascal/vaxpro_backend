@@ -108,7 +108,7 @@ class VaccinationSchedulesController extends Controller
         $vaccine = Vaccination::where('id', $request->vaccine_id)->first();
         $freq = 0;
         if ($vaccine) {
-            $child_vaccination_id = ChildVaccination::where('vaccination_id', $vaccine->id)->value('id');
+            $child_vaccination_id = ChildVaccination::where('vaccination_id', $vaccine->id)->where('child_id', $request->child_id)->value('id');
             if ($request->index == 0) {
                 $freq = 1;
                 $next_date = Carbon::createFromFormat('Y-m-d', $request->selected_date)
@@ -155,7 +155,6 @@ class VaccinationSchedulesController extends Controller
 
     public function updateSelectedVacs(Request $request)
     {
-
         $data = $request->data;
         $dates = $data['dates'];
         $health_worker_id = $data['health_worker_id'];
@@ -168,18 +167,9 @@ class VaccinationSchedulesController extends Controller
         $frequencyCounter = [];
 
 
-
         foreach ($dates as $frequency => $dateArray) {
 
-            $vaccine = ChildVaccination::where('vaccination_id',$frequency)->where('child_id',$child_id)->first();
-
-            if(!$vaccine){
-               $vaccine =  ChildVaccination::create([
-                    'child_id' => $child_id,
-                    'vaccination_id' =>$frequency,
-                    'is_active' => true,
-                ]);
-            }
+            $child_vaccine_id = ChildVaccination::where('child_id', $child_id)->where('vaccination_id', $frequency)->value('id');
 
             if (!isset($frequencyCounter[$frequency])) {
                 $frequencyCounter[$frequency] = 0;
@@ -195,7 +185,7 @@ class VaccinationSchedulesController extends Controller
 
 
                 ChildVaccinationSchedule::create([
-                    'child_vaccination_id' => $vaccine->id,
+                    'child_vaccination_id' => $child_vaccine_id,
                     'child_id' => $child_id,
                     'health_worker_id' => $health_worker,
                     'facility_id' => $facility_id,
@@ -218,7 +208,6 @@ class VaccinationSchedulesController extends Controller
                 $child_schedule['vaccine_id'] = ChildVaccination::where('id', $child_schedule['child_vaccination_id'])->value('vaccination_id');
                 $child_schedule['total_freq'] = Vaccination::where('id', $child_schedule['vaccine_id'])->value('frequency');
             }
-
 
 
             return response()->json([
