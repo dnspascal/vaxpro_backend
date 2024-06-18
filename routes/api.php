@@ -13,6 +13,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\VaccinationSchedulesController;
 use App\Http\Controllers\CertificatesController;
+use App\Http\Controllers\ChatMessageController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('createVaccine', [VaccinationController::class, 'createVaccine']);
@@ -47,7 +48,7 @@ Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
     Route::get('/user', [UserController::class, 'userData']);
     Route::delete('/user/{id}', [UserController::class, 'destroy']);
     Route::get('/all_users/{id}', [UserController::class, 'allUsers']);
-    
+
 
     //address endpoints
     Route::get('/regions', [RegionController::class, 'showAll']);
@@ -60,11 +61,21 @@ Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
     //certificates
 
     //booking endpoints
+
+
+    //send msg endpoint 
+    Route::post('send_message',[ChatMessageController::class,'store']);
 });
 Route::post("/certificates", [CertificatesController::class,"store"]);
 
 
 Route::get('hospital_bookings/{id}', [BookingController::class,'show']);
+Route::get("indexBooking/{card_no}", [BookingController::class,'indexBooking']);
+Route::put('/update_booking/{id}', [BookingController::class, 'update']);
+
+//parent bookings
+Route::get('parent_bookings/{id}', [BookingController::class,'parent_bookings']);
+Route::get('delete_booking/{id}', [BookingController::class, 'destroy']);
 
 
 // regions endpoints
@@ -97,7 +108,7 @@ Route::get('facility/{id}', [FacilityController::class, 'show']);
 Route::put('facility/{id}', [FacilityController::class, 'update']);
 Route::delete('facility/{id}', [FacilityController::class, 'destroy']);
 
-// children 
+// children
 
 
 

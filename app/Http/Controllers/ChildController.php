@@ -19,9 +19,6 @@ class ChildController extends Controller
 {
     public function parentChildData(Request $request)
     {
-
-        return $request->gender;
-
         $ward_id = $request->ward;
 
         $childExists = Child::where('card_no', $request->card_no)->exists();
@@ -102,7 +99,8 @@ class ChildController extends Controller
                 'modified_by' => $request->modified_by
             ]);
 
-            $parentData->children()->attach([$child->card_no => ["relationship_with_child" => $request->relation]]);
+            $parentData->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
+
 
             $vaccine_count = Vaccination::all()->count();
 
@@ -176,12 +174,17 @@ class ChildController extends Controller
         }
     }
 
-    public function children_data()
-    {
+    public function children_data(){
         $children = Child::all();
-        $success = 100 * ((88 - 12) / count($children));
+        $success = 100*((88-12)/count($children) );
 
-        $approx = number_format($success, 2);
+        $vaccinated_children = Child::whereDoesntHave('vaccinations', function ($query) {
+            $query->where('is_active', '!=', 0);
+        })->get();
+
+
+        $approx = number_format($success,2);
+
 
         return response()->json(['registered_children' => count($children), 'vaccinated_children' => 88, 'unvaccinated_children' => 12, 'success' => $approx]);
     }
