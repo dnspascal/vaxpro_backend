@@ -62,10 +62,15 @@ Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
     //booking endpoints
 
 
-    //send msg endpoint 
+    //send msg endpoint
     Route::post('send_message',[ChatMessageController::class,'store']);
 });
+//Roles
+Route::post('/new_role', [RoleController::class, 'store']);
+Route::delete('delete_role/{id}', [RoleController::class, 'destroy']);
+
 Route::post("/certificates", [CertificatesController::class,"store"]);
+Route::get("/certificates/{id}", [CertificatesController::class,"show"]);
 
 
 Route::get('hospital_bookings/{id}', [BookingController::class,'show']);
