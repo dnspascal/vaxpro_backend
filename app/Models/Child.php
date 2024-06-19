@@ -62,6 +62,6 @@ class Child extends Model
     }
 
     public function certificates(){
-        return $this->hasMany(Certificates::class);
+        return $this->hasOne(Certificates::class, 'child_id', 'card_no');
     }
 }
