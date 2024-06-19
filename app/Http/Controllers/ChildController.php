@@ -206,7 +206,7 @@ class ChildController extends Controller
         $approx = number_format($success,2);
 
 
-        return response()->json(['registered_children' => count($children), 'vaccinated_children' => 88, 'unvaccinated_children' => 12, 'success' => $approx,'region_children'=>$vaccinated_children]);
+        return response()->json(['registered_children' => count($children), 'vaccinated_children' => 88, 'unvaccinated_children' => 12, 'success' => $approx,'region_children'=>count($vaccinated_children)]);
     }
 
 
