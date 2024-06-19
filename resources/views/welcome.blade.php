@@ -19,11 +19,19 @@
     //             })
     //     }, 200);
 
+    // setTimeout(() => {
+    //         window.Echo.private('private.{{Auth::id()}}')
+    //             .listen('PrivateEvent', (e) => {
+    //                 console.log(e);
+    //             })
+    //     }, 200);
+
     setTimeout(() => {
-            window.Echo.private('private.{{Auth::id()}}')
-                .listen('PrivateEvent', (e) => {
-                    console.log(e);
-                })
-        }, 200);
+        window.Echo.private('chat.{{Auth::id()}}')
+            .listen('MessageSent', (e) => {
+                console.log(e);
+            })
+    }, 200);   
+
 </script>
 </html>

@@ -129,7 +129,7 @@ class AuthController extends Controller
             $to_user = explode('+',$recipient)[1];
             $postData = [
 
-                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-'." . $password .". " na Profile id " . $user["uid"],
+                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-'. $password. " na Profile id " . $user["uid"],
                 'recipient' => $to_user
             ];
 
