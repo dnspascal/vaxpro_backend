@@ -25,11 +25,21 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $validate = Validator::make($request->only('contacts'), ['contacts' => ["unique:users,contacts"]]);
+
+        $validate = Validator::make($request->only('contacts'), [
+            "contacts" => [
+                "required",
+                "min:13",
+                "max:13",
+                "unique:users,contacts",
+                "regex:/^\+255/",
+            ],
+        ]);
 
         if ($validate->fails()) {
             return response()->json(["error" => "contacts", "message" => "This contact is already taken"], 400);
         }
+     
 
         if ($request->has("ward_id")) {
 
@@ -93,7 +103,11 @@ class AuthController extends Controller
             $to_user = explode('+', $recipient)[1];
             $postData = [
 
-                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-' . " . $password ." . " na Profile id " . $user["uid"], 'recipient' => $to_user];
+
+                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-'. $password. " na Profile id " . $user["uid"],
+
+                'recipient' => $to_user
+            ];
 
             // Send SMS using the service
             $this->smsService->sms_oasis($postData);
@@ -106,7 +120,19 @@ class AuthController extends Controller
     public function update(Request $request, $id): JsonResponse
     {
 
-        $validate = Validator::make($request->only('contacts'), ['contacts' => ["unique:users,contacts"]]);
+
+
+
+        $validate = Validator::make($request->only('contacts'), [
+            "contacts" => [
+                "required",
+                "min:13",
+                "max:13",
+                "unique:users,contacts",
+                "regex:/^\+255/",
+            ],
+        ]);
+
 
         if ($validate->fails()) {
             return response()->json(["error" => "contacts", "message" => "This contact is already taken"], 400);
@@ -141,11 +167,28 @@ class AuthController extends Controller
     {
         $credentials = $request->only(["contacts", "password"]);
 
+        $contacts = preg_replace('/^0/', '+255', $credentials['contacts']);
+
+        $validator = Validator::make(['contacts' => $contacts], [
+            "contacts" => [
+                "required",
+                "min:13",
+                "max:13",
+                "regex:/^\+255/",
+            ],
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json("Invalid phone number format", 400);
+        }
+
         if (Auth::attempt($credentials)) {
 
             $token = $request->user()->createToken("vaxPro")->plainTextToken;
-
-            return response()->json($token, 200);
+            return response()->json(
+                $token,
+                200
+            );
         } else
             return response()->json("Phonenumber or password is incorrect", 401);
     }

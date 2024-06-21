@@ -12,7 +12,6 @@ class WardController extends Controller
     {
         $searchQuery = $request->searchQuery;
 
-
         if (!empty($searchQuery)) {
 
             $wards = Ward::where('ward_name', 'LIKE', '%' . $searchQuery . '%')->with('district')->get();

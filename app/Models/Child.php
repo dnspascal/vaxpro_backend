@@ -26,6 +26,9 @@ class Child extends Model
         return $this->hasMany(ChildVaccinationSchedule::class);
     }
 
+    // public function child_vaccination(){
+    //     return $this->belongsToMany();
+    // }
 
     public function vaccinations()
     {
