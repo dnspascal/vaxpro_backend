@@ -217,8 +217,9 @@ class ChildController extends Controller
             ->when($gender, function ($query) use ($gender) {
                 $query->where('gender', $gender);
             })
+            ->whereHas('vaccinations') 
             ->whereDoesntHave('vaccinations', function ($query) use ($vaccineId){
-                $query->where('is_active', 1);
+                $query->where('is_active','!=' ,0);
                 if ($vaccineId) {
                     $query->where('vaccine_id', $vaccineId);
                 }
