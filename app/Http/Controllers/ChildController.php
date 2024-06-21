@@ -179,24 +179,26 @@ class ChildController extends Controller
 
     public function children_data(Request $request){
         $children = Child::all();
-        $success = 100*((88-12)/count($children) );
+        
         $regionId = 3;
 
         $validator = Validator::make($request->all(), [
-            'region_id' => 'integer|nullable',
-            'district_id' => 'integer|nullable',
+            'region' => 'integer|nullable',
+            'district' => 'integer|nullable',
             'year' => 'integer|nullable|min:1900|max:' . date('Y'),
-            'gender' => 'string|nullable|in:male,female',
+            'gender' => 'string|nullable|in:Male,Female',
+            'vaccine' => 'integer|nullable',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $regionId = $request->input('region_id');
-        $districtId = $request->input('district_id');
+        $regionId = $request->input('region');
+        $districtId = $request->input('district');
         $year = $request->input('year');
         $gender = $request->input('gender');
+        $vaccineId = $request->input('vaccine');
 
         $vaccinated_children = Child::query()
             ->when($regionId, function ($query) use ($regionId) {
@@ -210,23 +212,44 @@ class ChildController extends Controller
                 });
             })
             ->when($year, function ($query) use ($year) {
-                $query->whereYear('created_at', $year); // Filtering by the created_at year
+                $query->whereYear('created_at', $year); 
             })
             ->when($gender, function ($query) use ($gender) {
                 $query->where('gender', $gender);
             })
-            ->whereDoesntHave('vaccinations', function ($query) {
+            ->whereDoesntHave('vaccinations', function ($query) use ($vaccineId){
                 $query->where('is_active', 1);
+                if ($vaccineId) {
+                    $query->where('vaccine_id', $vaccineId);
+                }
             })
             ->get();
 
+            $registered_children = Child::query()
+            ->when($regionId, function ($query) use ($regionId) {
+                $query->whereHas('ward.district.region', function ($query) use ($regionId) {
+                    $query->where('id', $regionId);
+                });
+            })
+            ->when($districtId, function ($query) use ($districtId) {
+                $query->whereHas('ward.district', function ($query) use ($districtId) {
+                    $query->where('id', $districtId);
+                });
+            })
+            ->when($year, function ($query) use ($year) {
+                $query->whereYear('created_at', $year); 
+            })
+            ->when($gender, function ($query) use ($gender) {
+                $query->where('gender', $gender);
+            })
+            ->get();
         
-
+            $success = count($registered_children) == 0 ? 0 : 100*((count($vaccinated_children))/count($registered_children) );
 
         $approx = number_format($success,2);
 
 
-        return response()->json(['registered_children' => count($children), 'vaccinated_children' => 88, 'unvaccinated_children' => 12, 'success' => $approx,'region_children'=>count($vaccinated_children)]);
+        return response()->json(['registered_children' => count($registered_children), 'vaccinated_children' => count($vaccinated_children), 'unvaccinated_children' => count($registered_children) - count($vaccinated_children), 'success' => $approx,'region_children'=>count($vaccinated_children)]);
     }
 
     public function updateChildParentInfo(Request $request)

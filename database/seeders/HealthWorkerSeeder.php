@@ -29,5 +29,24 @@ class HealthWorkerSeeder extends Seeder
             "user_id"=> $user->id
 
         ]);
+
+        $json_co_workers = file_get_contents(database_path('json/community_workers.json'));
+        $workers = json_decode($json_co_workers, true);
+
+        $workers_data = [];
+        foreach ($workers as $worker) {
+            $workers_data[] = [
+                'role_id' => $worker["role"],
+                'uid' => $worker["uid"],
+                'password' => $worker["password"],
+                'ward_id' =>$worker['ward_id'],
+                'contacts' => $worker['contacts'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        // dd($workers);
+        User::insert($workers_data);
     }
 }
