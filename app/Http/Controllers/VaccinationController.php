@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Child;
 use App\Models\ChildVaccination;
 use App\Models\Vaccination;
 use Illuminate\Http\Request;
@@ -37,6 +38,23 @@ class VaccinationController extends Controller
             'vaccines' => $vaccines,
             'status' => 200
         ]);
+    }
+
+    public function getChildVaccines($id){
+        $vaccines = Vaccination::all();
+        $child = Child::where('card_no', $id)->first();
+        if($child->gender == 'female'){
+            return response()->json([
+                'vaccines' => $vaccines,
+                'status' => 200
+            ]);
+        }else{
+            $vaccines = Vaccination::where('abbrev','!=','HPV')->get();
+            return response()->json([
+                'vaccines' => $vaccines,
+                'status' => 200
+            ]);
+        }
     }
 
     public function getVaccine($id)

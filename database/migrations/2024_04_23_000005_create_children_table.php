@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('ward_id');
             $table->string('house_no')->nullable();
             $table->date('date_of_birth');
+            $table->string('gender');
             $table->unsignedBigInteger('modified_by');
             $table->foreign('facility_id')->references('facility_reg_no')->on('facilities')->onDelete('cascade');
             $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');

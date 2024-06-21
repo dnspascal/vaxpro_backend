@@ -20,8 +20,6 @@ class ChildController extends Controller
     public function parentChildData(Request $request)
     {
 
-        return $request->gender;
-
         $ward_id = $request->ward;
 
         $childExists = Child::where('card_no', $request->card_no)->exists();
@@ -42,7 +40,6 @@ class ChildController extends Controller
                 'ward_id' => $ward_id,
                 'facility_id' => $request->facility_id,
                 'modified_by' => $request->modified_by,
-                //created........
                 'gender' => $request->gender,
 
             ]);
@@ -99,7 +96,8 @@ class ChildController extends Controller
                 'house_no' => $request->house_no,
                 'ward_id' => $ward_id,
                 'facility_id' => $request->facility_id,
-                'modified_by' => $request->modified_by
+                'modified_by' => $request->modified_by,
+                'gender' => $request->gender,
             ]);
 
             $parentData->children()->attach([$child->card_no => ["relationship_with_child" => $request->relation]]);
