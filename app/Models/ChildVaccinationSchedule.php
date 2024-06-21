@@ -17,7 +17,7 @@ class ChildVaccinationSchedule extends Model
     }
 
     public function child(){
-        return $this->belongsTo(Child::class);
+        return $this->belongsTo(Child::class,"child_id","card_no");
     }
 
     public function health_workers()

@@ -1,0 +1,23 @@
+[
+    {
+        "role":12,
+        "uid":"123_123",
+        "password":"password",
+        "ward_id":123,
+        "contacts":"+255752451811"
+    },
+    {
+        "role":12,
+        "uid":"321_321",
+        "password":"password",
+        "ward_id":2355,
+        "contacts":"+255658004980"
+    }
+    ,{
+        "role":12,
+        "uid":"987_987",
+        "password":"password",
+        "ward_id":1008,
+        "contacts":"+255748088341"
+    }
+]

@@ -20,7 +20,7 @@ class ParentsGuardiansFactory extends Factory
     public function definition(): array
     {
         return [
-            'nida_id' => $this->faker->unique()->numerify('##########'),
+            'nida_id' => $this->faker->unique()->numerify('####################'),
             'firstname' => $this->faker->firstName,
             'middlename' => $this->faker->firstName,
             'lastname' => $this->faker->lastName,

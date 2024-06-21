@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('health_worker_id');//foreign
             $table->string('facility_id'); //foreign
             $table->string('frequency');
-            $table->dateTime('vaccination_date');
-            $table->dateTime('next_vaccination_date')->nullable();
+            $table->date('vaccination_date');
+            $table->date('next_vaccination_date')->nullable();
             $table->boolean('status');// if false after the particular day a message is sent to the child.
             $table->foreign('child_id')->references('card_no')->on('children')->onDelete('cascade');
             $table->foreign('child_vaccination_id')->references('id')->on('child_vaccinations')->onDelete('cascade');

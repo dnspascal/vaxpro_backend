@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Facility;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -11,24 +12,16 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MessageSent implements ShouldBroadcast
+class BookingEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public User $receiver,public User $sender ,public string $message)
+    public function __construct(public Facility $facility)
     {
         //
-    }
-    public function broadcastWith()
-    {
-        return [
-            'receiver' => $this->receiver,
-            'sender' => $this->sender,
-            'message' => $this->message,
-        ];
     }
 
     /**
@@ -38,12 +31,8 @@ class MessageSent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        
         return [
-            new PrivateChannel("chat.{$this->receiver->id}"),
-            // new PrivateChannel("chat.102"),
+            new PrivateChannel('booking.{facility}'),
         ];
     }
-
-
 }
