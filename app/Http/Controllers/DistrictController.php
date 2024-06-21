@@ -57,17 +57,20 @@ public function show_facilities(string $id)
 {
     $district = District::with('ward.facility')->find($id);
 
-    if($district){
-
+    if ($district) {
         $facilities = collect();
-
-        foreach ($district->ward as $ward){
-            $facilities = $facilities->merge($ward->facility);
+    
+        foreach ($district->ward as $ward) {
+            // Load the facilities with the 'wards' relationship
+            $wardFacilities = $ward->facility()->with('ward')->get();
+            $facilities = $facilities->concat($wardFacilities);
         }
-
-        return response()->json($facilities,200);
+    
+        return response()->json($facilities->unique('id')->values(), 200);
     }
-    return response()->json(['message'=>"district not found"],404);
+    
+    return response()->json(['message' => "District not found"], 404);
+    
 }
 
 public function region_districts(Request $request){

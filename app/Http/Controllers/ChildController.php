@@ -13,13 +13,14 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Role;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+
 
 class ChildController extends Controller
 {
     public function parentChildData(Request $request)
     {
-
         $ward_id = $request->ward;
 
         $childExists = Child::where('card_no', $request->card_no)->exists();
@@ -100,7 +101,8 @@ class ChildController extends Controller
                 'gender' => $request->gender,
             ]);
 
-            $parentData->children()->attach([$child->card_no => ["relationship_with_child" => $request->relation]]);
+            $parentData->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);
+
 
             $vaccine_count = Vaccination::all()->count();
 
@@ -140,6 +142,7 @@ class ChildController extends Controller
         if ($id) {
             $child_data = Child::where('card_no', $id)
                 ->with([
+                    'certificates',
                     'parents_guardians' => function ($query) {
                         $query->withPivot('relationship_with_child');
                     },
@@ -174,14 +177,56 @@ class ChildController extends Controller
         }
     }
 
-    public function children_data()
-    {
+    public function children_data(Request $request){
         $children = Child::all();
-        $success = 100 * ((88 - 12) / count($children));
+        $success = 100*((88-12)/count($children) );
+        $regionId = 3;
 
-        $approx = number_format($success, 2);
+        $validator = Validator::make($request->all(), [
+            'region_id' => 'integer|nullable',
+            'district_id' => 'integer|nullable',
+            'year' => 'integer|nullable|min:1900|max:' . date('Y'),
+            'gender' => 'string|nullable|in:male,female',
+        ]);
 
-        return response()->json(['registered_children' => count($children), 'vaccinated_children' => 88, 'unvaccinated_children' => 12, 'success' => $approx]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
+        $regionId = $request->input('region_id');
+        $districtId = $request->input('district_id');
+        $year = $request->input('year');
+        $gender = $request->input('gender');
+
+        $vaccinated_children = Child::query()
+            ->when($regionId, function ($query) use ($regionId) {
+                $query->whereHas('ward.district.region', function ($query) use ($regionId) {
+                    $query->where('id', $regionId);
+                });
+            })
+            ->when($districtId, function ($query) use ($districtId) {
+                $query->whereHas('ward.district', function ($query) use ($districtId) {
+                    $query->where('id', $districtId);
+                });
+            })
+            ->when($year, function ($query) use ($year) {
+                $query->whereYear('created_at', $year); // Filtering by the created_at year
+            })
+            ->when($gender, function ($query) use ($gender) {
+                $query->where('gender', $gender);
+            })
+            ->whereDoesntHave('vaccinations', function ($query) {
+                $query->where('is_active', 1);
+            })
+            ->get();
+
+        
+
+
+        $approx = number_format($success,2);
+
+
+        return response()->json(['registered_children' => count($children), 'vaccinated_children' => 88, 'unvaccinated_children' => 12, 'success' => $approx,'region_children'=>count($vaccinated_children)]);
     }
 
     public function updateChildParentInfo(Request $request)

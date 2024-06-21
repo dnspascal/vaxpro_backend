@@ -27,11 +27,13 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+
         $validate = Validator::make($request->only('contacts'), [
             "contacts" => [
                 "required",
                 "min:13",
                 "max:13",
+                "unique:users,contacts",
                 "regex:/^\+255/",
             ],
         ]);
@@ -44,6 +46,7 @@ class AuthController extends Controller
         //        ],[
         //            'contacts.unique' => "This contact already exists.",
         //        ]);
+
 
 
         if ($request->has("ward_id")) {
@@ -140,7 +143,8 @@ class AuthController extends Controller
             $to_user = explode('+', $recipient)[1];
             $postData = [
 
-                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-' . " . $password ." . " na Profile id " . $user["uid"],
+                'message' => 'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-'. $password. " na Profile id " . $user["uid"],
+
                 'recipient' => $to_user
             ];
 
@@ -156,14 +160,17 @@ class AuthController extends Controller
     {
 
 
+
         $validate = Validator::make($request->only('contacts'), [
             "contacts" => [
                 "required",
                 "min:13",
                 "max:13",
+                "unique:users,contacts",
                 "regex:/^\+255/",
             ],
         ]);
+
 
         if ($validate->fails()) {
             return response()->json(["error" => "contacts", "message" => "This contact is already taken"], 400);

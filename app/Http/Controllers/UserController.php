@@ -15,46 +15,41 @@ class UserController extends Controller
     public function userData()
     {
         if (Auth::check()) {
-            $user = Auth::user();
-            $user = array();
+
             $user = Auth::user();
             $parent = ParentsGuardians::where('user_id',$user->id)->first();
             $user['role'] = Auth::user()->role;
 
             if($user->role->account_type == "ministry"){
-                return response()->json([$user],200);
+                return response()->json($user,200);
             }
 
             if (!is_null($user->district_id)) {
                 $user['district'] = Auth::user()->district->region;
 
-                return response()->json([$user]);
+                return response()->json($user,200);
             }
             if (!is_null($user->region_id)) {
                 $user['region'] = Auth::user()->region;
-                return response()->json([$user]);
-            }
-
-            if (!is_null($user->facility_id)) {
-                $user['facility'] = Auth::user()->facilities;
-                return response()->json([$user]);
-            }
-
-            
-
-            if (count($user->health_workers)!= 0) {
-                $health_worker = HealthWorker::where('user_id',$user->id)->first();
-                $user['health_worker'] = $health_worker;
                 return response()->json($user,200);
             }
 
+            if (!is_null($user->facility_id)) {
+                $user['facilities'] = Auth::user()->facilities;
+                 Auth::user()->health_workers;
+//                $user->role->account_type === "health_worker" && $user['health_workers'] = "ndagula";
+
+                return response()->json($user,200);
+            }
+
+
             if (!is_null($parent)) {
-                $child = $parent->children()->first();
-                $user['child'] = $child; 
-                $ward = Ward::where('id',$child->ward_id)->first();
+                $child = $parent->children()->get();
+                $user['children'] = $child;
+                $ward = Ward::where('id',$user->ward_id)->first();
                 $user['parent'] = $parent;
                 $user['ward'] = $ward->ward_name.", ".$ward->district->district_name;
-                
+
                 function calculateAge($dateString) {
                     $birthDate = Carbon::parse($dateString);
                     $currentDate = Carbon::now();
@@ -77,7 +72,7 @@ class UserController extends Controller
     public function allUsers(Request $request)
     {
 
-        
+
         $loggedInUser = User::find($request->id);
         switch ($loggedInUser->role->account_type) {
             case "ministry":

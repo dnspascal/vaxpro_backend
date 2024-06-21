@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('child_id'); // foreign key for child
             $table->unsignedBigInteger('vaccination_id'); // foregin key for vaccination
-            $table->boolean('is_active'); // if false implies all the vaccination are administered...
+            $table->boolean('is_active')->default(true); // if false implies all the vaccination are administered...
             $table->foreign('child_id')->references('card_no')->on('children')->onDelete('cascade');
             $table->foreign('vaccination_id')->references('id')->on('vaccinations')->onDelete('cascade');
 
