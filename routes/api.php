@@ -30,7 +30,7 @@ Route::get('getChildData/{id}', [ChildController::class, 'getChildData']);
 Route::post('getAllChildSchedules', [VaccinationSchedulesController::class, 'vaccine']);
 Route::get('getVacSchedules/{id}', [VaccinationSchedulesController::class, 'getVacSchedules']);
 Route::post('updateChildVacSchedule', [VaccinationSchedulesController::class, 'updateChildVacSchedule']);
-Route::get('getChildVaccines', [VaccinationController::class, 'getVaccines']);
+Route::get('getChildVaccines/{id}', [VaccinationController::class, 'getChildVaccines']);
 Route::post('all_children',[ChildController::class,'children_data']);
 Route::get('fetchVaccineIds', [VaccinationController::class, 'fetchVaccineIds']);
 Route::post('updateSelectedVacs', [VaccinationSchedulesController::class,'updateSelectedVacs']);
