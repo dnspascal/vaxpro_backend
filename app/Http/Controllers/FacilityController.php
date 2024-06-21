@@ -10,6 +10,15 @@ class FacilityController extends Controller
    
        public function create(Request $request)
     {
+        $request->validate([
+           "contacts" => [
+                "required",
+                "min:13",
+                "max:13",
+                "regex:/^\+255/",
+            ],
+        ]);
+        
        
         $facility =  Facility::where('facility_reg_no',$request->facility_reg_no)->first();
         if ($facility) {

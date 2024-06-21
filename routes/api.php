@@ -30,7 +30,7 @@ Route::get('getChildData/{id}', [ChildController::class, 'getChildData']);
 Route::post('getAllChildSchedules', [VaccinationSchedulesController::class, 'vaccine']);
 Route::get('getVacSchedules/{id}', [VaccinationSchedulesController::class, 'getVacSchedules']);
 Route::post('updateChildVacSchedule', [VaccinationSchedulesController::class, 'updateChildVacSchedule']);
-Route::get('getChildVaccines', [VaccinationController::class, 'getVaccines']);
+Route::get('getChildVaccines/{id}', [VaccinationController::class, 'getChildVaccines']);
 Route::post('all_children',[ChildController::class,'children_data']);
 Route::get('fetchVaccineIds', [VaccinationController::class, 'fetchVaccineIds']);
 Route::post('updateSelectedVacs', [VaccinationSchedulesController::class,'updateSelectedVacs']);
@@ -51,8 +51,6 @@ Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
 
 
     //address endpoints
-    Route::get('/regions', [RegionController::class, 'showAll']);
-    Route::get('region_districts/{region_id}', [DistrictController::class, 'region_districts']);
     Route::get('districts_wards/{district_id}', [WardController::class, 'districts_wards']);
 
     //roles endpoints
@@ -81,6 +79,17 @@ Route::put('/update_booking/{id}', [BookingController::class, 'update']);
 //parent bookings
 Route::get('parent_bookings/{id}', [BookingController::class,'parent_bookings']);
 Route::get('delete_booking/{id}', [BookingController::class, 'destroy']);
+
+//Password recovery
+Route::get('password-recovery/{contacts}', [UserController::class, 'passwordRecovery']);
+Route::get('resend-code/{contacts}', [UserController::class, 'resendCode']);
+Route::post('recovery_questions',[UserController::class,'recoveryQuestion']);
+Route::put('password_update',[UserController::class,'updatePassword']);
+
+//password recovery regions, it is here cause of that
+Route::get('/regions', [RegionController::class, 'showAll']);
+Route::get('region_districts/{region_id}', [DistrictController::class, 'region_districts']);
+
 
 
 // regions endpoints

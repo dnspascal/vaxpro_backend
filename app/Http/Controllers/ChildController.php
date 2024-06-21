@@ -97,7 +97,8 @@ class ChildController extends Controller
                 'house_no' => $request->house_no,
                 'ward_id' => $ward_id,
                 'facility_id' => $request->facility_id,
-                'modified_by' => $request->modified_by
+                'modified_by' => $request->modified_by,
+                'gender' => $request->gender,
             ]);
 
             $parentData->children()->attach([$child->card_no=>["relationship_with_child"=>$request->relation]]);

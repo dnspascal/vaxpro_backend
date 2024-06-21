@@ -109,6 +109,8 @@ class VaccinationSchedulesController extends Controller
         $freq = 0;
         if ($vaccine) {
             $child_vaccination_id = ChildVaccination::where('vaccination_id', $vaccine->id)->where('child_id', $request->child_id)->value('id');
+            $child_vaccination = ChildVaccination::where('child_id', $request->child_id)->where('vaccination_id', $vaccine->id)->first();
+
             if ($request->index == 0) {
                 $freq = 1;
                 $next_date = Carbon::createFromFormat('Y-m-d', $request->selected_date)
@@ -147,9 +149,26 @@ class VaccinationSchedulesController extends Controller
                 'frequency' => $freq,
                 'vaccination_date' => $request->selected_date,
                 'next_vaccination_date' => $next_date,
-                'status' => true,
+                'status' => false,
 
             ]);
+
+            $child_vac_schedules = ChildVaccinationSchedule::where('child_id', $request->child)->where('child_vaccination_id', $child_vaccination_id)->get();
+            if ($child_vac_schedules->count() > 1) {
+                foreach ($child_vac_schedules as $schedule) {
+                    if ($schedule->frequency <= $child_vac_schedules->count()) {
+                        $schedule->update([
+                            'status' => true,
+                        ]);
+                    }
+                }
+            }
+
+            if ($freq == $vaccine->frequency) {
+                $child_vaccination->update([
+                    'is_active' => false,
+                ]);
+            }
         }
     }
 
