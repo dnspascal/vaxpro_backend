@@ -244,13 +244,70 @@ class ChildController extends Controller
                 $query->where('gender', $gender);
             })
             ->get();
+
+
+            $parents = User::query()
+            ->when($regionId, function ($query) use ($regionId) {
+                $query->whereHas('ward.district.region', function ($query) use ($regionId) {
+                    $query->where('id', $regionId);
+                });
+            })
+            ->when($districtId, function ($query) use ($districtId) {
+                $query->whereHas('ward.district', function ($query) use ($districtId) {
+                    $query->where('id', $districtId);
+                });
+            })
+            ->when($year, function ($query) use ($year) {
+                $query->whereYear('created_at', $year); 
+            })
+            ->whereHas('role', function ($query){
+                $query->where('account_type',"parent");
+                
+            })
+            ->get();
+
+            $ministry_accounts = User::query()
+            ->when($year, function ($query) use ($year) {
+                $query->whereYear('created_at', $year); 
+            })
+            ->whereHas('role', function ($query){
+                $query->where('account_type',"ministry");
+                
+            })
+            ->get();
+
+            $regional_accounts = User::query()
+            ->when($regionId, function ($query) use ($regionId) {
+                $query->where('region_id', $regionId);
+            })
+            ->when($year, function ($query) use ($year) {
+                $query->whereYear('created_at', $year); 
+            })
+            ->whereHas('role', function ($query){
+                $query->where('account_type',"regional");
+            })
+            ->get();
+
+            $district_accounts = User::query()
+            ->when($districtId, function ($query) use ($districtId) {
+                $query->where('district_id', $districtId);
+            })
+            ->when($year, function ($query) use ($year) {
+                $query->whereYear('created_at', $year); 
+            })
+            ->whereHas('role', function ($query){
+                $query->where('account_type',"district");
+            })
+            ->get();
+
+            $pieChartData = [['name'=>'ministry','value'=>count($ministry_accounts)],['name'=>'regional','value'=>count($regional_accounts)],['name'=>'district','value'=>count($district_accounts)],['name'=>'children','value'=>count($registered_children)],['name'=>'parents','value'=>count($parents)]];
         
             $success = count($registered_children) == 0 ? 0 : 100*((count($vaccinated_children))/count($registered_children) );
 
         $approx = number_format($success,2);
 
 
-        return response()->json(['registered_children' => count($registered_children), 'vaccinated_children' => count($vaccinated_children), 'unvaccinated_children' => count($registered_children) - count($vaccinated_children), 'success' => $approx,'region_children'=>count($vaccinated_children)]);
+        return response()->json(['registered_children' => count($registered_children), 'vaccinated_children' => count($vaccinated_children), 'unvaccinated_children' => count($registered_children) - count($vaccinated_children), 'success' => $approx,'region_children'=>count($vaccinated_children),'chart_data'=>$pieChartData]);
     }
 
     public function updateChildParentInfo(Request $request)
