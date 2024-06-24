@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Child;
+use App\Models\ChildVaccination;
 use App\Models\Notification;
 use App\Models\Vaccination;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -38,6 +40,22 @@ class VaccinationSeeder extends Seeder
 
         Vaccination::insert($vaccinations);
 
+        $children = Child::all();
+        $vaccine_count = Vaccination::all()->count();
+
+        foreach ($children as $child ) {
+            for ($id = 1; $id <= $vaccine_count; $id++) {
+                ChildVaccination::create([
+                    'child_id' => $child->card_no,
+                    'vaccination_id' => $id,
+                    'is_active' => true,
+                ]);
+            }
+        }
+
+        
+
+        
 
         $json_promotion = file_get_contents(database_path('json/promotion.json'));
         $promotions = json_decode($json_promotion, true);

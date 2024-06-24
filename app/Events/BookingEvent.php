@@ -19,7 +19,7 @@ class BookingEvent
     /**
      * Create a new event instance.
      */
-    public function __construct(public Facility $facility)
+    public function __construct(public string $id,public string $message)
     {
         //
     }
@@ -32,7 +32,7 @@ class BookingEvent
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('booking.{facility}'),
+            new PrivateChannel("booking.{$this->id}"),
         ];
     }
 }
