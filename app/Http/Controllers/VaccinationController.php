@@ -43,7 +43,7 @@ class VaccinationController extends Controller
     public function getChildVaccines($id){
         $vaccines = Vaccination::all();
         $child = Child::where('card_no', $id)->first();
-        if($child->gender == 'female'){
+        if($child->gender == 'Female'){
             return response()->json([
                 'vaccines' => $vaccines,
                 'status' => 200
@@ -68,7 +68,7 @@ class VaccinationController extends Controller
             ]);
         } else {
             return response()->json([
-                'vaccine' => 'No Product Found!',
+                'vaccine' => 'No Vaccine Found!',
                 'status' => 400
             ]);
         }

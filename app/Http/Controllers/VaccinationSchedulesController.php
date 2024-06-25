@@ -6,10 +6,10 @@ use App\Models\Child;
 use App\Models\ChildVaccination;
 use App\Models\ChildVaccinationSchedule;
 use App\Models\HealthWorker;
-use App\Models\MidEntryChild;
 use App\Models\Vaccination;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+
 
 class VaccinationSchedulesController extends Controller
 {
@@ -30,6 +30,7 @@ class VaccinationSchedulesController extends Controller
         foreach ($dataArray as $key => $vaccineItem) {
             $dates = array(); // Clear $dates array for each vaccine
             if ($vaccineItem->frequency >= 1) {
+
                 $dates[] = Carbon::createFromFormat('Y-m-d', $request->date)
                     ->addDays($vaccineItem->first_dose_after)
                     ->format('Y-m-d');
@@ -138,6 +139,34 @@ class VaccinationSchedulesController extends Controller
                     ->format('Y-m-d');
             }
 
+            $child = Child::where('card_no', $request->child_id)->first();
+            $vaccines = Vaccination::all();
+            $vaccine_ids = [];
+
+            if ($child->gender == 'Female') {
+                foreach ($vaccines as $single_vaccine) {
+                    $vaccine_ids[] = $single_vaccine->id;
+                }
+            } else {
+                $vaccines = Vaccination::where('abbrev', '!=', 'HPV')->get();
+                foreach ($vaccines as $single_vaccine) {
+                    $vaccine_ids[] = $single_vaccine->id;
+                }
+            }
+
+            $newRequest = new Request([
+                'date' => $request->selected_date,
+                'vaccines' => [$request->vaccine_id] // Assuming single vaccine_id, modify as necessary
+            ]);
+    
+            // Call the vaccine() method and handle JsonResponse
+            $response = $this->vaccine($newRequest);
+            
+            // Extract vaccineSchedule from JsonResponse
+            $vaccineSchedule = $response->getData()->vaccineSchedule;
+    
+            // Return extracted vaccineSchedule as JSON response
+            
             $health_worker_id = HealthWorker::where('user_id', $request->health_worker_id)->value('staff_id');
 
 
@@ -153,7 +182,7 @@ class VaccinationSchedulesController extends Controller
 
             ]);
 
-            $child_vac_schedules = ChildVaccinationSchedule::where('child_id', $request->child)->where('child_vaccination_id', $child_vaccination_id)->get();
+            $child_vac_schedules = ChildVaccinationSchedule::where('child_id', $request->child_id)->where('child_vaccination_id', $child_vaccination_id)->get();
             if ($child_vac_schedules->count() > 1) {
                 foreach ($child_vac_schedules as $schedule) {
                     if ($schedule->frequency <= $child_vac_schedules->count()) {
@@ -169,6 +198,11 @@ class VaccinationSchedulesController extends Controller
                     'is_active' => false,
                 ]);
             }
+
+            return response()->json([
+                'vaccineSchedule' => $vaccineSchedule
+            ]);
+
         }
     }
 
