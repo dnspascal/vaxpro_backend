@@ -19,6 +19,9 @@ class VaccinationSchedulesController extends Controller
         $result = array();
 
         $vacccineData =  $request->vaccines;
+        $child = $request->child_id;
+
+        $child_schedules = ChildVaccinationSchedule::where('child_id',$child)->get();
 
         foreach ($vacccineData as $value) {
             $vaccineData = Vaccination::where('id', $value)->first();
@@ -30,33 +33,86 @@ class VaccinationSchedulesController extends Controller
         foreach ($dataArray as $key => $vaccineItem) {
             $dates = array(); // Clear $dates array for each vaccine
             if ($vaccineItem->frequency >= 1) {
+                $childVaccinationSchedule = ChildVaccinationSchedule::where('child_id',$child)->where('frequency',1)->whereHas('child_vaccinations',function($query) use($vaccineItem){
+                    $query->where('vaccination_id',$vaccineItem->id);
+                })->first();
 
-                $dates[] = Carbon::createFromFormat('Y-m-d', $request->date)
+                if($childVaccinationSchedule){
+                    $dates[] = Carbon::createFromFormat('Y-m-d', $childVaccinationSchedule->vaccination_date)
+                    ->format('Y-m-d');  
+                }else{
+
+                    
+                    $dates[] = Carbon::createFromFormat('Y-m-d', $request->date)
                     ->addDays($vaccineItem->first_dose_after)
                     ->format('Y-m-d');
+                }
             }
             if ($vaccineItem->frequency >= 2) {
-                $dates[] = Carbon::createFromFormat('Y-m-d', end($dates))
+                
+                $childVaccinationSchedule = ChildVaccinationSchedule::where('child_id',$child)->where('frequency',2)->whereHas('child_vaccinations',function($query) use($vaccineItem){
+                    $query->where('vaccination_id',$vaccineItem->id);
+                })->first();
+
+                if($childVaccinationSchedule){
+                    $dates[] = Carbon::createFromFormat('Y-m-d', $childVaccinationSchedule->vaccination_date)
+                    ->format('Y-m-d');  
+                }
+                else
+                
+                {
+                    
+                    $dates[] = Carbon::createFromFormat('Y-m-d', end($dates))
                     ->addDays($vaccineItem->second_dose_after)
-                    ->format('Y-m-d');
+                    ->format('Y-m-d');}
             }
 
             if ($vaccineItem->frequency >= 3) {
-                $dates[] = Carbon::createFromFormat('Y-m-d', end($dates))
+                $childVaccinationSchedule = ChildVaccinationSchedule::where('child_id',$child)->where('frequency',3)->whereHas('child_vaccinations',function($query) use($vaccineItem){
+                    $query->where('vaccination_id',$vaccineItem->id);
+                })->first();
+
+                if($childVaccinationSchedule){
+                    $dates[] = Carbon::createFromFormat('Y-m-d', $childVaccinationSchedule->vaccination_date)
+                    ->format('Y-m-d');  
+                }
+                else
+                {
+                    $dates[] = Carbon::createFromFormat('Y-m-d', end($dates))
                     ->addDays($vaccineItem->third_dose_after)
                     ->format('Y-m-d');
+                }
             }
 
             if ($vaccineItem->frequency >= 4) {
-                $dates[] = Carbon::createFromFormat('Y-m-d', end($dates))
+                $childVaccinationSchedule = ChildVaccinationSchedule::where('child_id',$child)->where('frequency',4)->whereHas('child_vaccinations',function($query) use($vaccineItem){
+                    $query->where('vaccination_id',$vaccineItem->id);
+                })->first();
+
+                if($childVaccinationSchedule){
+                    $dates[] = Carbon::createFromFormat('Y-m-d', $childVaccinationSchedule->vaccination_date)
+                    ->format('Y-m-d');  
+                }
+                else
+                {$dates[] = Carbon::createFromFormat('Y-m-d', end($dates))
                     ->addDays($vaccineItem->fourth_dose_after)
-                    ->format('Y-m-d');
+                    ->format('Y-m-d');}
             }
 
             if ($vaccineItem->frequency >= 5) {
-                $dates[] = Carbon::createFromFormat('Y-m-d', end($dates))
+                $childVaccinationSchedule = ChildVaccinationSchedule::where('child_id',$child)->where('frequency',1)->whereHas('child_vaccinations',function($query) use($vaccineItem){
+                    $query->where('vaccination_id',$vaccineItem->id);
+                })->first();
+
+                if($childVaccinationSchedule){
+                    $dates[] = Carbon::createFromFormat('Y-m-d', $childVaccinationSchedule->vaccination_date)
+                    ->format('Y-m-d');  
+                }
+                else
+                {
+                    $dates[] = Carbon::createFromFormat('Y-m-d', end($dates))
                     ->addDays($vaccineItem->fifth_dose_after)
-                    ->format('Y-m-d');
+                    ->format('Y-m-d');}
             }
 
             $dosesDates = array();
