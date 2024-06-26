@@ -22,7 +22,7 @@ class UserFactory extends Factory
         $phoneNumber = '+255' . $this->faker->randomElement(['7', '6']) . $this->faker->numerify('########');
         return [
             'uid' => $this->faker->unique()->numerify('######'),
-            'role_id' => 10,
+            'role_id' => 13,
             'password' => Hash::make("12345"), // or use a hash function
             'ward_id' => $ward->id,
             'contacts' => $phoneNumber,

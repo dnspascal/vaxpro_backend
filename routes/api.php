@@ -62,6 +62,7 @@ Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
 
 
     //send msg endpoint
+    Route::get('/get_messages',[ChatMessageController::class,'getMessages']);
     Route::post('send_message',[ChatMessageController::class,'store']);
 });
 //Roles

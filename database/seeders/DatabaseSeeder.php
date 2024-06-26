@@ -90,10 +90,12 @@ class DatabaseSeeder extends Seeder
         $parents = ParentsGuardians::factory(100)->create();
 
         
-         Child::factory(120)->create()->each(function ($child, $index) use ($parents) {
+        Child::factory(120)->create()->each(function ($child, $index) use ($parents) {
             $parent = $parents[$index % $parents->count()]; // Ensures each parent gets at least one child
             $parent->children()->attach($child->card_no, ['relationship_with_child' => 'Relative']);
         });
+
+        
 
     }
 }
