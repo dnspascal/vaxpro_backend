@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class BookingEvent
+class BookingEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -22,6 +22,14 @@ class BookingEvent
     public function __construct(public string $id,public string $message)
     {
         //
+    }
+
+    public function broadcastWith()
+    {
+        return [
+            'receiver' => $this->id,
+            'message' => $this->message
+        ];
     }
 
     /**

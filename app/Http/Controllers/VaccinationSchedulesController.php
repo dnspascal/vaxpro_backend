@@ -153,7 +153,7 @@ class VaccinationSchedulesController extends Controller
 
             ]);
 
-            $child_vac_schedules = ChildVaccinationSchedule::where('child_id', $request->child)->where('child_vaccination_id', $child_vaccination_id)->get();
+            $child_vac_schedules = ChildVaccinationSchedule::where('child_id', $request->child_id)->where('child_vaccination_id', $child_vaccination_id)->get();
             if ($child_vac_schedules->count() > 1) {
                 foreach ($child_vac_schedules as $schedule) {
                     if ($schedule->frequency <= $child_vac_schedules->count()) {

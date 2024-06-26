@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BookingEvent;
 use App\Models\Booking;
 use App\Services\SmsService;
 use Carbon\Carbon;
@@ -15,12 +16,13 @@ class BookingController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-            // return response()->json( [ "request"=> $request->all()], 200 );
+            
             $values = $request->only(['facility_id', 'vaccine_list', 'child_id', 'vaccination_date']);
             $vaccinationDate = Carbon::parse($request->vaccination_date)->toDateTimeString();
             $booking = Booking::create(
                 ["facility_id" => $request->facility_id, "vaccine_list" => $request->vaccine_list, "child_id" => $request->child_id, "vaccination_date" => $vaccinationDate]
             );
+            broadcast(new BookingEvent($request->facility_id,"A booking to your hospital has been made for child with id ".$request->child_id." on date ".$vaccinationDate));
 
             return response()->json('booking set success', 200);
 
