@@ -25,7 +25,7 @@ class ChildFactory extends Factory
             'surname' => $this->faker->lastName,
             'facility_id' => $facility->facility_reg_no,
             'ward_id' => $ward->id,
-            'gender'=>'Male',
+            'gender' => $this->faker->randomElement(['Male', 'Female']),
             'house_no' => $this->faker->optional()->buildingNumber,
             'date_of_birth' => $this->faker->date(),
             'modified_by' => $modifiedBy->id,

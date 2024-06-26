@@ -13,7 +13,7 @@ class ChildVaccinationSchedule extends Model
 
     public function child_vaccinations()
     {
-        return $this->belongsTo(ChildVaccination::class);
+        return $this->belongsTo(ChildVaccination::class,'child_vaccination_id');
     }
 
     public function child(){

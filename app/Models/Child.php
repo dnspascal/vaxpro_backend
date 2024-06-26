@@ -14,7 +14,9 @@ class Child extends Model
 
     protected $keyType = 'string';
 
-    protected $fillable = ['card_no', 'firstname', 'middlename', 'surname',  'facility_id', 'ward_id','gender',  'house_no', 'date_of_birth', 'modified_by'];
+
+    protected $fillable = ['card_no', 'firstname', 'middlename', 'surname','gender', 'facility_id', 'ward_id',  'house_no', 'date_of_birth', 'modified_by'];
+
 
     public function bookings()
     {
