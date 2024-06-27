@@ -14,9 +14,13 @@ class Child extends Model
 
     protected $keyType = 'string';
 
+<<<<<<< Updated upstream
 
     protected $fillable = ['card_no', 'firstname', 'middlename', 'surname','gender', 'facility_id', 'ward_id',  'house_no', 'date_of_birth', 'modified_by'];
 
+=======
+    protected $fillable = ['card_no', 'firstname', 'middlename', 'surname',  'facility_id','gender', 'ward_id',  'house_no', 'date_of_birth', 'modified_by'];
+>>>>>>> Stashed changes
 
     public function bookings()
     {
