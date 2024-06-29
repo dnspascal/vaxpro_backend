@@ -323,6 +323,7 @@ class ChildController extends Controller
                 'surname' => $request->child_parent_data['last_name'],
                 'middlename' => $request->child_parent_data['middle_name'],
                 'ward_id' => $request->child_parent_data['ward_id'],
+                'gender' => $request->child_parent_data['gender'],
                 'house_no' => $request->child_parent_data['house_no'],
                 'date_of_birth' => $request->child_parent_data['birth_date'],
                 'facility_id' => $request->facility_id,

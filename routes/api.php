@@ -2,6 +2,7 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\FacilityController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\ReportController;
@@ -36,6 +37,7 @@ Route::post('all_children',[ChildController::class,'children_data']);
 Route::get('fetchVaccineIds', [VaccinationController::class, 'fetchVaccineIds']);
 Route::post('updateSelectedVacs', [VaccinationSchedulesController::class,'updateSelectedVacs']);
 Route::post('updateChildParentInfo', [ChildController::class,'updateChildParentInfo']);
+Route::post('submitFeedback', [FeedbackController::class, 'submitFeedback']);
 
 
 Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
@@ -124,6 +126,7 @@ Route::delete('ward/{id}', [WardController::class, 'destroy']);
 Route::get('facilities', [FacilityController::class, 'showAll']);
 Route::post('facility', [FacilityController::class, 'create']);
 Route::get('facility/{id}', [FacilityController::class, 'show']);
+Route::get('get_facility/{id}', [FacilityController::class, 'get_facility']);
 Route::put('facility/{id}', [FacilityController::class, 'update']);
 Route::delete('facility/{id}', [FacilityController::class, 'destroy']);
 
