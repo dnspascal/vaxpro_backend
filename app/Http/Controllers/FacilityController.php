@@ -49,6 +49,16 @@ class FacilityController extends Controller
         return response()->json(['message'=> 'Hospital not found'],404);
     }
 
+    public function get_facility(string $id)
+    {
+        $facility = Facility::where('facility_reg_no',$id)->first();
+
+        if($facility){
+            return response()->json([$facility],200);
+        }
+        return response()->json(['message'=> 'Hospital not found'],404);
+    }
+
    
     public function update(Request $request, string $id)
     {
