@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Schedule;
 
 
 Schedule::job(VaccinationReminderJob::class)->dailyAt('08:00'); 
+// Schedule::job(VaccinationReminderJob::class)->everyMinute(); 
 
 
 Schedule::job(VaccinationPromotionJob::class)->weeklyOn(1, '08:00'); 

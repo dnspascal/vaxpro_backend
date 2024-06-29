@@ -4,6 +4,7 @@ use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\RegionController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\WardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -58,8 +59,11 @@ Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
 
     //certificates
 
-    //booking endpoints
+    // booking endpoints
+    Route::post('add_booking', [BookingController::class, 'store']);
 
+    // report endpoints 
+    Route::post('reports',[ReportController::class,'reportData']);
 
     //send msg endpoint
     Route::get('/get_messages',[ChatMessageController::class,'getMessages']);
@@ -132,8 +136,7 @@ Route::post('send_sms', [SMSController::class, 'sendSms']);
 Route::post('sms', [SMSController::class, 'sms_oasis']);
 
 
-// booking endpoints
-Route::post('add_booking', [BookingController::class, 'store']);
+
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/parent_login', [AuthController::class, 'parent_login']);
