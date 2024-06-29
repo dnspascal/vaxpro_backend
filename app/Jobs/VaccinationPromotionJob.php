@@ -43,8 +43,18 @@ class VaccinationPromotionJob implements ShouldQueue
                 'message' => $randomMessage->message,
                 'recipient' =>$parent->user->contacts
             ];
-         // $this->smsService->sms_oasis($postData);
-        }
+             $this->smsService->sms_oasis($postData);
+            }
+       
+        // $randomMessage = Notification::inRandomOrder()->first();   
+        // // Log::info("This is the post message sent", [$randomMessage->message,$parent->user->contacts]);
+        // $postData = [
+
+        //     'message' => $randomMessage->message,
+        //     'recipient' =>'255745884099'
+        // ];
+        //$this->smsService->sms_oasis($postData);
+        
 
     }
 }

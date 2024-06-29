@@ -29,7 +29,7 @@ class Child extends Model
 
     public function child_vaccination_schedules()
     {
-        return $this->hasMany(ChildVaccinationSchedule::class);
+        return $this->hasMany(ChildVaccinationSchedule::class,'child_id','card_no');
     }
 
     // public function child_vaccination(){
