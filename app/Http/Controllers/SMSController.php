@@ -14,7 +14,7 @@ class SMSController extends Controller
     }
 
     // data contains recipient and message
-    public function sendSms($data)
+    public function sendSms(Request $request)
     {
         // $postData = [
         //     'source_addr' => 'INFO',
@@ -29,9 +29,12 @@ class SMSController extends Controller
 
         
 
+        
+
         try {
             
-            $this->smsService->sms_oasis($data);
+            // $this->smsService->sms_oasis($data);
+            $this->smsService->sendSms($request);
 
          return response()->json(["message sent successfully"]);
         } catch (\Exception $e) {
