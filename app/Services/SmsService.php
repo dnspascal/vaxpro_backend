@@ -18,26 +18,53 @@ class SmsService
 
     public function sendSms($postData)
     {
+        $postData = [
+            'source_addr' => 'VaxPro',
+            'encoding' => 0,
+            'schedule_time' => '',
+            'message' => $postData["message"],
+            'recipients' => [
+                [
+                    'recipient_id' => '1', 
+                    'dest_addr' => $postData['recipient']
+                ]
+            ]
+        ];
+
         $url = 'https://apisms.beem.africa/v1/send';
 
-        $client = new Client([
-            'verify' => false, // Disabling SSL verification, you may want to remove this line and configure SSL properly
-            'headers' => [
-                'Authorization' => 'Basic ' . base64_encode("{$this->apiKey}:{$this->secretKey}"),
-                'Content-Type' => 'application/json'
-            ]
-        ]);
+        $client = new Client();
 
         try {
-
             $response = $client->post($url, [
-                'json' => $postData
+                'headers' => [
+                    'Authorization' => 'Basic ' . base64_encode("$this->apiKey:$this->secretKey"),
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $postData,
+                'verify' => false // This disables SSL verification
             ]);
 
-            return json_decode($response->getBody()->getContents(), true);
-        } catch (\Exception $e) {
-            // Handle exception
-            return ['error' => $e->getMessage()];
+            $responseBody = $response->getBody()->getContents();
+            return response()->json([
+                'success' => true,
+                'response' => json_decode($responseBody)
+            ]);
+
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+                $responseBody = $response->getBody()->getContents();
+                return response()->json([
+                    'success' => false,
+                    'response' => json_decode($responseBody)
+                ], $response->getStatusCode());
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ], 500);
+            }
         }
     }
 

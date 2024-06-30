@@ -13,8 +13,8 @@ class Child extends Model
     protected $primaryKey = 'card_no';
     protected $keyType = 'string';
 
-
     protected $fillable = ['card_no', 'firstname', 'middlename', 'surname', 'gender', 'facility_id', 'ward_id', 'house_no', 'date_of_birth', 'modified_by'];
+
 
 
     public function bookings()
