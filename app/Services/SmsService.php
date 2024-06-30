@@ -138,7 +138,7 @@ class SmsService
         ];
         $request = new Request('POST', "https://api.oasistech.co.tz/v3/sms/send");
         $res = $client->sendAsync($request, $options)->wait();
-       
+
         return response()->json($res->getBody(), 200);
     }
 }

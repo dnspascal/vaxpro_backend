@@ -6,17 +6,15 @@ use App\Events\BookingEvent;
 use App\Models\Booking;
 use App\Services\SmsService;
 use Carbon\Carbon;
-use http\Env\Response;
 use Illuminate\Http\Request;
 use \Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {
-
     public function store(Request $request): JsonResponse
     {
-            
+            Log::info("MESSAGE HERE BOOKING",[]);
             $values = $request->only(['facility_id', 'vaccine_list', 'child_id', 'vaccination_date']);
             $vaccinationDate = Carbon::parse($request->vaccination_date)->toDateTimeString();
             $booking = Booking::create(
