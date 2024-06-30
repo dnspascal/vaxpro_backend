@@ -10,6 +10,7 @@ use App\Models\Vaccination;
 use App\Models\ParentsGuardians;
 use App\Models\ParentsGuardiansChild;
 use App\Models\User;
+use App\Services\SmsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Role;
@@ -19,6 +20,14 @@ use Illuminate\Support\Facades\DB;
 
 class ChildController extends Controller
 {
+
+    protected $smsService;
+
+    public function __construct(SmsService $smsService)
+    {
+        $this->smsService = $smsService;
+    }
+
     public function parentChildData(Request $request)
     {
         $ward_id = $request->ward;
@@ -67,6 +76,19 @@ class ChildController extends Controller
 
 
             ]);
+
+            if($parent){
+                $postData = [
+
+
+                    'message' => 'Ndugu mzazi wa '.$child->firstname.' '.$child->surname.''.'Umesajiliwa kikamilifu kwenye mfumo wa VaxPro, tumia password-'. $password. " na Profile id " . $user["uid"],
+
+                    'recipient' => $user->contacts
+                ];
+
+                // Send SMS using the service
+                $this->smsService->sendSms($postData);
+            }
 
 
             $parent->children()->attach([$child->card_no => ["relationship_with_child" => $request->relation]]);
@@ -179,7 +201,7 @@ class ChildController extends Controller
 
     public function children_data(Request $request){
         $children = Child::all();
-        
+
         $regionId = 3;
 
         $validator = Validator::make($request->all(), [
@@ -212,12 +234,12 @@ class ChildController extends Controller
                 });
             })
             ->when($year, function ($query) use ($year) {
-                $query->whereYear('created_at', $year); 
+                $query->whereYear('created_at', $year);
             })
             ->when($gender, function ($query) use ($gender) {
                 $query->where('gender', $gender);
             })
-            ->whereHas('vaccinations') 
+            ->whereHas('vaccinations')
             ->whereDoesntHave('vaccinations', function ($query) use ($vaccineId){
                 $query->where('is_active','!=' ,0);
                 if ($vaccineId) {
@@ -238,7 +260,7 @@ class ChildController extends Controller
                 });
             })
             ->when($year, function ($query) use ($year) {
-                $query->whereYear('created_at', $year); 
+                $query->whereYear('created_at', $year);
             })
             ->when($gender, function ($query) use ($gender) {
                 $query->where('gender', $gender);
@@ -258,21 +280,21 @@ class ChildController extends Controller
                 });
             })
             ->when($year, function ($query) use ($year) {
-                $query->whereYear('created_at', $year); 
+                $query->whereYear('created_at', $year);
             })
             ->whereHas('role', function ($query){
                 $query->where('account_type',"parent");
-                
+
             })
             ->get();
 
             $ministry_accounts = User::query()
             ->when($year, function ($query) use ($year) {
-                $query->whereYear('created_at', $year); 
+                $query->whereYear('created_at', $year);
             })
             ->whereHas('role', function ($query){
                 $query->where('account_type',"ministry");
-                
+
             })
             ->get();
 
@@ -281,7 +303,7 @@ class ChildController extends Controller
                 $query->where('region_id', $regionId);
             })
             ->when($year, function ($query) use ($year) {
-                $query->whereYear('created_at', $year); 
+                $query->whereYear('created_at', $year);
             })
             ->whereHas('role', function ($query){
                 $query->where('account_type',"regional");
@@ -293,7 +315,7 @@ class ChildController extends Controller
                 $query->where('district_id', $districtId);
             })
             ->when($year, function ($query) use ($year) {
-                $query->whereYear('created_at', $year); 
+                $query->whereYear('created_at', $year);
             })
             ->whereHas('role', function ($query){
                 $query->where('account_type',"district");
@@ -301,7 +323,7 @@ class ChildController extends Controller
             ->get();
 
             $pieChartData = [['name'=>'ministry','value'=>count($ministry_accounts)],['name'=>'regional','value'=>count($regional_accounts)],['name'=>'district','value'=>count($district_accounts)],['name'=>'children','value'=>count($registered_children)],['name'=>'parents','value'=>count($parents)]];
-        
+
             $success = count($registered_children) == 0 ? 0 : 100*((count($vaccinated_children))/count($registered_children) );
 
         $approx = number_format($success,2);
@@ -382,7 +404,7 @@ class ChildController extends Controller
         DB::beginTransaction();
 
         try {
-          
+
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
             $tables = [
@@ -398,14 +420,14 @@ class ChildController extends Controller
                 DB::table($table)->where($columnName, $oldCardNo)->update([$columnName => $newCardNo]);
             }
 
-           
+
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
             DB::commit();
             return "Card number updated successfully!";
         } catch (\Exception $e) {
             DB::rollback();
-           
+
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
             return "Error updating card number: " . $e->getMessage();
         }
