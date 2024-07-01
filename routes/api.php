@@ -52,6 +52,8 @@ Route::middleware(['auth:sanctum', 'tokenExpiration'])->group(function () {
     Route::delete('/user/{id}', [UserController::class, 'destroy']);
     Route::get('/all_users/{id}', [UserController::class, 'allUsers']);
 
+    // child vaccination details
+    Route::get('/child_vaccinations/{id}', [UserController::class, 'childData']);
 
     //address endpoints
     Route::get('districts_wards/{district_id}', [WardController::class, 'districts_wards']);

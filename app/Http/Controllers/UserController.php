@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\VerificationCode;
+use App\Models\Child;
+use App\Models\ChildVaccination;
 use App\Models\ParentsGuardians;
 use App\Models\User;
 use App\Models\Ward;
@@ -184,5 +186,23 @@ class UserController extends Controller
             return response()->json(["message"=>"Password update failed","status"=> 401]);
         }
         return response()->json(['message' => "User not found", 'status' => 401]);
+    }
+
+    // child data
+
+    public function childData($id){
+        $child = Child::where('card_no',$id)->first();
+
+        $childVaccinationData = [];
+        if($child){
+            $vaccinations = ChildVaccination::where('child_id',$child->card_no)->get();
+
+            foreach ($vaccinations as  $value) {
+                $childVaccinationData[] = ["name"=>$value->vaccinations()->first()->abbrev,"total"=>$value->vaccinations()->first()->frequency,"received"=>$child->child_vaccination_schedules->where('child_vaccination_id',$value->id)->count()];
+            }
+            return response()->json($childVaccinationData,200);
+        }
+
+        return response()->json("Child not found",404);
     }
 }
