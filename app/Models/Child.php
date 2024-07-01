@@ -46,7 +46,7 @@ class Child extends Model
 
     public function facilities()
     {
-        return $this->belongsTo(Facility::class, null, 'card_no');
+        return $this->belongsTo(Facility::class, 'facility_id', 'facility_reg_no');
     }
 
     public function ward()
