@@ -33,8 +33,8 @@ class SMSController extends Controller
 
         try {
             
-            // $this->smsService->sms_oasis($data);
-            $this->smsService->sendSms($request);
+             $this->smsService->sms_oasis($request);
+            //$this->smsService->sendSms($request);
 
          return response()->json(["message sent successfully"]);
         } catch (\Exception $e) {
