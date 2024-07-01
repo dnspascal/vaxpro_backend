@@ -15,5 +15,7 @@ class ChildVaccination extends Model
         return $this->hasMany(ChildVaccinationSchedule::class);
     }
     
-
+    public function vaccinations(){
+        return $this->hasMany(Vaccination::class,'id','vaccination_id');
+    }
 }
